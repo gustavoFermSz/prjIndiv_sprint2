@@ -1,3 +1,10 @@
+# A linha abaixo determina que o diretório node_modules não será enviado ao repositório remoto
+node_modules
+package-lock.json
+# .env  <--- já está marcada no modelo que o github criou automaticamente
+.env.dev
+# aparentemente é melhor versionar os arquivos/diretórios .github
+
 # Logs
 logs
 *.log
