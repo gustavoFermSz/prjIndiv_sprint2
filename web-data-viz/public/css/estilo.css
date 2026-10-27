@@ -1,18 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: black;
 }
 
 :root {
   --tamanho-header: 80px;
+  --branco-principal: #EAF1FF;
+  --preto-principal: #303034;
+  --vermelho-principal: #C23B22;
+
+
   --tamanho-banner: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-login: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-footer: 65px;
+
+  --fonte-titulo: 'Playfair';
 }
 
 .container {
@@ -23,7 +33,7 @@ body {
 
 .header {
   height: var(--tamanho-header);
-  border-bottom: 2px solid #32b9cd;
+  border-bottom: 2px solid var(--vermelho-principal);
 }
 
 .header .container {
@@ -47,17 +57,64 @@ body {
   align-items: center;
   justify-content: space-between;
   list-style: none;
-  color: #e3b062;
+  color: #d4a373;
 }
 
 .titulo {
-  color: #32b9cd;
-  width: fit-content;
+  font-family: var(--fonte-titulo);
   font-weight: 500;
+  color: var(--vermelho-principal);
+
+  width: 15%;
 }
+
+/*
+.titulo img {
+  width: 100%;
+}*/
+
 
 .header h1 {
   margin: 0;
+}
+
+/* Vídeo fonte: https://youtu.be/V-_esdbwgbA  &&  https://youtu.be/kZTmF63CyPc 
+Tamanhos mais usados:
+    Até 640px/768px: Dispositivos móveis (smartphones) e tablets pequenos. 
+    768px a 1024px: Tablets em modo retrato/paisagem e telas pequenas. 
+    1024px a 1280px: Notebooks e desktops menores. 
+    Acima de 1440px: Monitores grandes e TVs.
+*/
+/* RESPONSIVIDADE DO CABEÇALHO */
+@media (max-width: 640px) {
+
+  .navbar {
+    width: 60%;
+    font-size: 12px;
+  }
+
+
+  /* RESPONSIVIDADE DO BANNER */
+
+  /* RESPONSIVIDADE DA FILEIRA DE MISSÕES */
+  .boxes {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .box {
+    flex: 1;
+  }
+
+  .box img {
+    width: 80;
+  }
+
+  /* RESPONSIVIDADE DO FOOTER */
+
 }
 
 /* BANNER */
@@ -65,8 +122,9 @@ body {
 .banner {
   height: var(--tamanho-banner);
   color: white;
-  background-image: url('../assets/imgs/bg-jelly-fish-para-home.png');
+  background-image: url('../assets/imgs/fundo_theWitcher3.jpg');
   background-size: cover;
+  background-position: center center;
 }
 
 .banner .container {
@@ -85,6 +143,7 @@ body {
 .banner .container span {
   font-weight: 800;
 }
+
 
 /* MISSÃO VISÃO VALORES */
 
@@ -118,10 +177,11 @@ body {
   align-items: center;
 }
 
+
 /* FOOTER */
 
 .footer {
-  background-color: #32b9cd;
+  background-color: var(--preto-principal);
   height: 150px;
   color: #fff;
   display: flex;
@@ -136,6 +196,15 @@ body {
 .footer .container .version {
   font-size: 12px;
 }
+
+
+
+
+
+
+
+
+
 
 /* LOGIN */
 
@@ -237,7 +306,7 @@ body {
 
 /* FORMULARIO */
 
-.alerta_erro{
+.alerta_erro {
   display: flex;
   justify-content: flex-end;
 }
@@ -254,7 +323,7 @@ body {
   margin-right: 10%;
 }
 
-.card_erro #mensagem_erro{
+.card_erro #mensagem_erro {
   font-weight: 500;
   font-size: 20px;
 }
@@ -310,7 +379,7 @@ input {
 
 .simulador .container {
   flex-direction: column;
-  overflow: scroll; 
+  overflow: scroll;
   height: var(--tamanho-simulador);
 }
 
@@ -354,9 +423,23 @@ input {
 }
 
 @keyframes bell {
-  0%   {transform: rotate(25deg)}
-  25%  {transform: rotate(-25deg)}
-  50%  {transform: rotate(25deg)}
-  75%  {transform: rotate(-25deg)}
-  100% {transform: rotate(25deg)}
+  0% {
+    transform: rotate(25deg)
+  }
+
+  25% {
+    transform: rotate(-25deg)
+  }
+
+  50% {
+    transform: rotate(25deg)
+  }
+
+  75% {
+    transform: rotate(-25deg)
+  }
+
+  100% {
+    transform: rotate(25deg)
+  }
 }
