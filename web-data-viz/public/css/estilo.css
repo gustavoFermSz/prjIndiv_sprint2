@@ -3,26 +3,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
 
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: black;
-}
-
 :root {
-  --tamanho-header: 80px;
+  --tamanho-header: 40px;
+  --tamanho-header-mobile: 40px;
+
+  --tamanho-fonte-titulo: 32px;
+
   --branco-principal: #EAF1FF;
   --preto-principal: #303034;
   --vermelho-principal: #C23B22;
 
 
-  --tamanho-banner: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
+  --tamanho-banner: 95vh; /*calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);*/
+  --tamanho-banner-mobile: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-login: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-footer: 65px;
 
   --fonte-titulo: 'Playfair';
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: black;
+
+  scrollbar-color: var(--vermelho-principal);
+  scrollbar-width: thin;
 }
 
 .container {
@@ -31,10 +39,29 @@ body {
   margin: auto;
 }
 
+/*  Site utilizado de inspiração: https://www.thewitcher.com/br/pt-br/witcher3  */
 .header {
+  position: fixed;
   height: var(--tamanho-header);
+  width: 100%;
+
+  /* background: linear-gradient(to bottom, var(--branco-principal) 0.2%, transparent 100%); */
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+
+  top: 0;
+  left: 0;
+  right: 0;
+  
+  -webkit-mask: linear-gradient(var(--preto-principal) 40%, var(--preto-principal) 80%);
+  mask: linear-gradient(#000 60%, #0000 100%);
+
+
+  background-color: transparent;
   border-bottom: 2px solid var(--vermelho-principal);
 }
+
+
 
 .header .container {
   justify-content: space-between;
@@ -44,7 +71,14 @@ body {
 
 .header a {
   text-decoration: none;
-  color: #e3b062;
+  /* background-color: var(--preto-principal); */
+  color: var(--vermelho-principal);
+
+  transition: 0.3s ease-in-out;
+}
+
+.header a:hover {
+  color: #94230f;
 }
 
 .agora {
@@ -57,15 +91,19 @@ body {
   align-items: center;
   justify-content: space-between;
   list-style: none;
-  color: #d4a373;
+  color: var(--vermelho-principal);
 }
 
 .titulo {
   font-family: var(--fonte-titulo);
-  font-weight: 500;
+  font-weight: 700;
   color: var(--vermelho-principal);
 
-  width: 15%;
+  border-radius: 12px;
+  background-color: rgba(10, 0, 5, 0.35);
+
+  font-size: var(--tamanho-fonte-titulo);
+  width: fit-content;
 }
 
 /*
@@ -96,6 +134,10 @@ Tamanhos mais usados:
 
   /* RESPONSIVIDADE DO BANNER */
 
+  .banner {
+    height: 80vh;
+  }
+
   /* RESPONSIVIDADE DA FILEIRA DE MISSÕES */
   .boxes {
     display: flex;
@@ -116,15 +158,20 @@ Tamanhos mais usados:
   /* RESPONSIVIDADE DO FOOTER */
 
 }
+/*    FIM RESPONSIVIDADES     */
+
+
+
 
 /* BANNER */
 
 .banner {
   height: var(--tamanho-banner);
   color: white;
-  background-image: url('../assets/imgs/fundo_theWitcher3.jpg');
+  background-image: url('../assets/imgs/fundo_bladeRunner.png');
   background-size: cover;
-  background-position: center center;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .banner .container {
@@ -137,6 +184,11 @@ Tamanhos mais usados:
   width: 50%;
   margin: 0;
   padding: 0;
+
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #0d0d0d6b 0.002%, transparent 100%);
+
+  text-align: center;
   font-size: 36px;
 }
 
@@ -175,6 +227,7 @@ Tamanhos mais usados:
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0px 8px;
 }
 
 
@@ -189,10 +242,30 @@ Tamanhos mais usados:
 }
 
 .footer .container {
-  justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  width: 100%;
   text-align: center;
 }
 
+.footer .container .titulo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px;
+}
+
+.footer .container .msg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px;
+}
+
+
+/* nem sei o que é esse version (ainda) */
 .footer .container .version {
   font-size: 12px;
 }
