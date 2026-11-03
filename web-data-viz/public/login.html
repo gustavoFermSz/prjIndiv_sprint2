@@ -19,73 +19,116 @@
 
     <!--Header-->
 
-    <div class="header">
-        <div class="container">
-            <h1 class="titulo">AquaTech</h1>
-            <ul class="navbar">
-                <li>
-                    <a href="index.html">Inicial</a>
-                </li>
-                <li>
-                    <a href="simulador.html">Simulador</a>
-                </li>
-                <li>|</li>
-                <li class="agora">
-                    <a href="#">Login</a>
-                </li>
-                <li>
-                    <a href="cadastro.html">Cadastro</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <body>
 
-
-    <div class="login">
-        <div class="alerta_erro">
-            <div class="card_erro" id="cardErro">
-                <span id="mensagem_erro"></span>
+        <div class="header">
+            <div class="container">
+                <h1 class="titulo">FicSiete</h1>
+                <ul class="navbar">
+                    <li>
+                        <a href="index.html">Home</a>
+                    </li>
+                    <li>
+                        <a href="simulador.html">Quizes</a>
+                    </li>
+                    <li>|</li>
+                    <li>
+                        <a href="#">Cartas</a>
+                    </li>
+                    <li class="agora">
+                        <a href="#">Login</a>
+                    </li>
+                    <li>
+                        <a href="cadastro.html">Cadastro</a>
+                        <!-- Ficará a imagem do avatar quando for usuário logado -->
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="container">
-            <div class="card card-login">
-                <h2>Olá de volta!</h2>
-                <div class="formulario">
-                    <div class="campo">
-                        <span>E-mail:</span>
-                        <input id="email_input" type="text" placeholder="Login">
-                    </div>
-                    <div class="campo">
-                        <span>Senha:</span>
-                        <input id="senha_input" type="password" placeholder="******">
-                    </div>
-                    <button class="botao" onclick="entrar()">Entrar</button>
+
+
+        <div class="login">
+            <div class="alerta_erro">
+                <div class="card_erro" id="cardErro">
+                    <span id="mensagem_erro"></span>
+                </div>
+            </div>
+
+
+
+            <div class="container">
+
+
+            <!-- CARD COM TÍTULO CALL TO ACTION E TEXTO PRÉ-INPUTS -->
+                <div class="text-login">
+                    <h2 class="tl-title">Entre e acesse quizes, cartas e o universo da ficção</h2>
+                    <h5 class="tl-desc">Seu portal para aventuras medievais, cyberpunk, distópicas e muito mais.</h5>
                 </div>
 
-                <div id="div_aguardar" class="loading-div">
-                    <img src="./assets/circle-loading.gif" id="loading-gif">
-                </div>
+                <div class="card card-login">
+                    <h2>Olá de volta!</h2>
 
-                <div id="div_erros_login"></div>
+                    <div class="formulario">
+
+
+                        <div class="campo">
+                            <input id="email_input" type="text" required> <!-- REMOVER REQUIRED DEPOIS -->
+                            <span>E-mail:</span>
+                        </div>
+
+
+                        <div class="campo">
+                            <input id="senha_input" type="password" required> <!-- REMOVER REQUIRED DEPOIS -->
+                            <span>Senha:</span>
+                        </div>
+
+
+                        <button class="botao" onclick="entrar()">Entrar</button>
+
+
+                    </div>
+
+                    <div id="div_aguardar" class="loading-div">
+                        <img src="./assets/circle-loading.gif" id="loading-gif">
+                    </div>
+
+                    <div id="div_erros_login"></div>
+                </div>
+            </div>
+
+
+
+
+            <!-- CARD COM BOTÃO REDIRECIONANDO PARA A TELA DE CADASTRO -->
+
+            
+        </div>
+
+
+
+
+
+        <!--footer inicio-->
+        <div class="footer">
+            <div class="container">
+                <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023-2026</h4>
             </div>
         </div>
-    </div>
+        <!--footer fim-->
 
-    <!--footer inicio-->
-    <div class="footer">
-        <div class="container">
-            <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023-2026</h4>
-        </div>
-    </div>
-    <!--footer fim-->
-
-</body>
+    </body>
 
 </html>
 
 <script>
 
 
+
+
+
+
+
+// ------------------------------------------------------ FUNÇÕES NATIVAS DO WEB-DATA-VIZ ------------------------------------------------------
     function entrar() {
         aguardar();
 

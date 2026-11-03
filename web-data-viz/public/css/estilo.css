@@ -6,21 +6,64 @@
 :root {
   --tamanho-header: 40px;
   --tamanho-header-mobile: 40px;
-
+  
+  --tamanho-fonte-principal: 44px;
   --tamanho-fonte-titulo: 32px;
+  --tamanho-fonte-subtitulo: 24px;
+  --tamanho-fonte-texto-grande: 16px;
+  --tamanho-fonte-texto-pequeno: 12px;
+  --tamanho-fonte-texto-minúsculo: 8px;
+
+  --fonte-titulo: 'Playfair';
+  --fonte-texto: 'Inter';
+
+
+
 
   --branco-principal: #EAF1FF;
-  --preto-principal: #303034;
+  --branco-secundário: #F3F0F5;
+  --branco-terciário: #FFEEE0;
+
+  --preto-principal: #1A1A1E;
+  --preto-secundário: #000000;
+  --preto-terciário: #303034;
+
   --vermelho-principal: #C23B22;
+  --vermelho-secundário: #8E1400;
+  --vermelho-terciário: #F55F43;
+
+  --palha-principal: #D4A373;
+  --palha-secundário: #B5885A;
+  --palha-terciário: #F0BD8B;
 
 
-  --tamanho-banner: 95vh; /*calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);*/
+  --índigo-principal: #64748B;
+  --índigo-secundário: #213145;
+  --índigo-terciário: #D3E4FE;
+
+
+
+  --tamanho-banner: 95vh;
+  /*calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);*/
   --tamanho-banner-mobile: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-login: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-footer: 65px;
 
-  --fonte-titulo: 'Playfair';
+}
+
+::-webkit-scrollbar {
+  width: 7.5px;
+}
+
+html ::-webkit-scrollbar-thumb {
+  background-color: var(--vermelho-principal);
+  border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--vermelho-terciário);
 }
 
 body {
@@ -28,9 +71,6 @@ body {
   padding: 0;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: black;
-
-  scrollbar-color: var(--vermelho-principal);
-  scrollbar-width: thin;
 }
 
 .container {
@@ -52,7 +92,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  
+
   -webkit-mask: linear-gradient(var(--preto-principal) 40%, var(--preto-principal) 80%);
   mask: linear-gradient(#000 60%, #0000 100%);
 
@@ -158,6 +198,7 @@ Tamanhos mais usados:
   /* RESPONSIVIDADE DO FOOTER */
 
 }
+
 /*    FIM RESPONSIVIDADES     */
 
 
@@ -215,6 +256,7 @@ Tamanhos mais usados:
 .social .container .boxes {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
   width: 100%;
   padding: 30px 0;
 }
@@ -228,8 +270,17 @@ Tamanhos mais usados:
   flex-direction: column;
   align-items: center;
   padding: 0px 8px;
+
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0 25px -16px var(--preto-principal);
+  transition: all 0.2s ease-in-out;
 }
 
+.box:hover {
+  box-shadow: 0 0 25px -4px var(--preto-principal);
+
+}
 
 /* FOOTER */
 
@@ -283,26 +334,55 @@ Tamanhos mais usados:
 
 .login {
   height: var(--tamanho-login);
-  background-image: url('../assets/imgs/bg-jelly-fish-para-home.png');
-  background-size: cover;
+  background-color: var(--branco-principal);
+
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .login .container {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
 
-.card {
-  width: 50%;
-  background-color: #e5e5e5;
-  border-radius: 10px;
+.login .container .text-login {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  color: palevioletred;
-  flex-direction: column;
+
+  width: 100%;
+  text-align: center;
+}
+
+.login .container .text-login h2.tl-title {
+  font-size: var(--tamanho-fonte-titulo);
+  font-family: var(--fonte-titulo);
+  color: var(--vermelho-principal);
+
+}
+
+.login .container .text-login h5.tl-desc {
+  font-size: var(--tamanho-fonte-texto-grande);
+  font-family: var(--fonte-texto);
+  color: var(--preto-terciário);
+  
+}
+
+.card {
   height: fit-content;
+  width: 75%;
+  color: var(--branco-secundário);
+  background-color: var(--preto-terciário);
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
   padding: 20px 0;
 }
 
@@ -313,22 +393,12 @@ Tamanhos mais usados:
 
 .formulario {
   display: flex;
-  height: 90%;
-  width: 80%;
   justify-content: space-around;
   flex-direction: column;
-}
+  gap: 8px;
 
-.formulario span {
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.formulario input {
-  border: 2px solid #32b9cd;
-  text-align: center;
-  border-radius: 10px;
-  margin: 0;
+  height: 90%;
+  width: 100%;
 }
 
 .formulario select {
@@ -342,24 +412,79 @@ Tamanhos mais usados:
 }
 
 .campo {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  padding: 5px 0;
+  position: relative;
+  width: 90%;
+  height: 60px;
+  margin: auto;
+  /* padding: 5px 0; */
+}
+
+/* FONTE PARA ESTILIZAÇÃO DOS INPUTS DESTA FORMA: https://youtu.be/kEaYpyFF9nE e https://youtu.be/Tdzas-IlKSM */
+
+.formulario .campo input {
+  position: absolute;
+  padding: 16px 20px;
+
+  color: var(--branco-secundário);
+  background: transparent;
+
+  width: 100%;
+  /*text-align: center;  */
+  font-weight: bold;
+  font-size: var(--tamanho-fonte-texto-grande);
+  letter-spacing: .05rem;
+  
+  outline: none;
+  border: 2px solid var(--índigo-principal); 
+  border-radius: 10px;
+  
+  z-index: 3;
+  transition: 0.1s ease-in-out;
+}
+
+.campo input:valid {
+  border: 2.5px solid var(--índigo-terciário);
+  
+}
+.campo input:focus {
+  border: 2.5px solid var(--branco-secundário);
+}
+
+.campo input:valid + span,
+.campo input:focus + span {
+  height: 50%;
+  transform: translate(4px, -12px) scale(0.7);
+
+  z-index: 3;
+}
+
+.formulario .campo span {
+  position: absolute;
+  left: 2%;
+
+  font-size: var(--tamanho-fonte-texto-grande);
+  color: var(--branco-secundário);
+    background-color: var(--preto-terciário);
+
+  transition: 0.3s;
+  pointer-events: none;
 }
 
 .botao {
   cursor: pointer;
-  font-family: "Barlow", sans-serif;
   border: 0;
   border-radius: 5px;
+  
+  align-self: center;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
   font-size: 18px;
-  color: #fff;
-  background-color: #ED145B;
+  
+  color: var(--branco-principal);
+  background-color: var(--vermelho-principal);
+
   width: 120px;
   height: 30px;
-  align-self: center;
   margin-top: 20px;
 }
 
@@ -376,6 +501,55 @@ Tamanhos mais usados:
 #div_erros_login {
   display: none
 }
+
+
+
+/* RESPONSIVIDADE DO CORPO DA TELA DE ----> LOGIN <---- */
+@media (max-width: 640px) {
+
+  /* RESPONSIVIDADE DO BANNER */
+
+  .banner {
+    height: 80vh;
+  }
+
+  /* RESPONSIVIDADE DA FILEIRA DE MISSÕES */
+  .boxes {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .box {
+    flex: 1;
+  }
+
+  .box img {
+    width: 80;
+  }
+
+  /* RESPONSIVIDADE DO FOOTER */
+
+}
+
+/*    FIM RESPONSIVIDADES     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* FORMULARIO */
 
