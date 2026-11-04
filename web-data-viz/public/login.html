@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AquaTech | Login</title>
+    <title>FicSiete - Login</title>
 
     <script src="./js/sessao.js"></script>
 
@@ -54,67 +54,106 @@
                 </div>
             </div>
 
+            <div class="login-main">
 
 
-            <div class="container">
+                <div class="container">
 
 
-            <!-- CARD COM TÍTULO CALL TO ACTION E TEXTO PRÉ-INPUTS -->
-                <div class="text-login">
-                    <h2 class="tl-title">Entre e acesse quizes, cartas e o universo da ficção</h2>
-                    <h5 class="tl-desc">Seu portal para aventuras medievais, cyberpunk, distópicas e muito mais.</h5>
+                    <!-- CARD COM TÍTULO CALL TO ACTION E TEXTO PRÉ-INPUTS -->
+                    <div class="text-login">
+                        <h2 class="tl-title">Entre e acesse quizes, cartas e o universo da ficção</h2>
+                        <h5 class="tl-desc">Seu portal para aventuras medievais, cyberpunk, distópicas e muito mais.
+                        </h5>
+                    </div>
+
+                    <div class="card card-login">
+
+                        <div class="formulario">
+
+
+                            <div class="campo">
+                                <input id="email_input" type="text" required> <!-- REMOVER REQUIRED DEPOIS -->
+                                <span>E-mail:</span>
+                            </div>
+
+
+                            <div class="campo">
+                                <input id="senha_input" type="password" required> <!-- REMOVER REQUIRED DEPOIS -->
+                                <span>Senha:</span>
+                            </div>
+
+
+                            <button class="botao" onclick="entrar()">Entrar</button>
+
+
+                        </div>
+
+                        <div id="div_aguardar" class="loading-div">
+                            <img src="./assets/circle-loading.gif" id="loading-gif">
+                        </div>
+
+                        <div id="div_erros_login"></div>
+                    </div>
+
                 </div>
 
-                <div class="card card-login">
-                    <h2>Olá de volta!</h2>
+                <!-- CARD COM BOTÃO REDIRECIONANDO PARA A TELA DE CADASTRO -->
+                <div class="tl-redirect">
 
-                    <div class="formulario">
+                    <div class="card-redirect">
 
+                        <div class="topo-redirect">
 
-                        <div class="campo">
-                            <input id="email_input" type="text" required> <!-- REMOVER REQUIRED DEPOIS -->
-                            <span>E-mail:</span>
+                            <img src="./assets/icon/wordmark.png" width="200px" alt="ícone simples de acesso">
+
+                            <div class="txt-redirect">
+
+                                <h3>Ainda não faz parte do FicSiete?</h3>
+                                <h5>Crie seu perfil para montar decks de cartas, acumular pontos em quizes e criar
+                                    suas
+                                    próprias sagas narrativas.</h5>
+
+                            </div>
+
                         </div>
 
 
-                        <div class="campo">
-                            <input id="senha_input" type="password" required> <!-- REMOVER REQUIRED DEPOIS -->
-                            <span>Senha:</span>
-                        </div>
-
-
-                        <button class="botao" onclick="entrar()">Entrar</button>
-
+                        <button>
+                            <img src="./assets/icon/cadastro.png" alt="Ícone de cadastro">
+                            Criar uma conta
+                        </button>
 
                     </div>
 
-                    <div id="div_aguardar" class="loading-div">
-                        <img src="./assets/circle-loading.gif" id="loading-gif">
-                    </div>
-
-                    <div id="div_erros_login"></div>
                 </div>
+
+
+
             </div>
 
-
-
-
-            <!-- CARD COM BOTÃO REDIRECIONANDO PARA A TELA DE CADASTRO -->
-
-            
         </div>
 
 
 
 
 
-        <!--footer inicio-->
+
+
         <div class="footer">
             <div class="container">
-                <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023-2026</h4>
-            </div>
-        </div>
-        <!--footer fim-->
+
+                <div class="dados_fic">
+                    <h1 class="titulo">FicSiete</h1>
+                    <h5>Todos os direitos reservados &copy; 2026</h5>
+                </div>
+
+                <div class="msg">
+                    <h4>Feito com &hearts; por um aluno SPTech</h4>
+                </div> <!-- FIM msg -->
+
+            </div> <!-- FIM CONTAINER -->
+        </div> <!-- FIM FOOTER -->
 
     </body>
 
@@ -128,7 +167,7 @@
 
 
 
-// ------------------------------------------------------ FUNÇÕES NATIVAS DO WEB-DATA-VIZ ------------------------------------------------------
+    // ------------------------------------------------------ FUNÇÕES NATIVAS DO WEB-DATA-VIZ ------------------------------------------------------
     function entrar() {
         aguardar();
 

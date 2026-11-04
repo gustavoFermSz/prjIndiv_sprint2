@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>AquaTech | Cadastro</title>
+  <title>FicSiete - Cadastro</title>
 
   <script src="./js/sessao.js"></script>
 
@@ -15,32 +15,32 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
-<body onload="listar()">
+<body> <!-- onload="listar()" -->
   <!--header inicio-->
   <div class="header">
-            <div class="container">
-                <h1 class="titulo">FicSiete</h1>
-                <ul class="navbar">
-                    <li class="agora">
-                        <a href="#">Home</a>
-                    </li>
-                    <li>
-                        <a href="simulador.html">Quizes</a>
-                    </li>
-                    <li>|</li>
-                    <li>
-                        <a href="#">Cartas</a>
-                    </li>
-                    <li>
-                        <a href="login.html">Login</a>
-                    </li>
-                    <li class="agora">
-                        <a href="#">Cadastro</a>
-                        <!-- Ficará a imagem do avatar quando for usuário logado -->
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div class="container">
+      <h1 class="titulo">FicSiete</h1>
+      <ul class="navbar">
+        <li>
+          <a href="index.html">Home</a>
+        </li>
+        <li>
+          <a href="simulador.html">Quizes</a>
+        </li>
+        <li>|</li>
+        <li>
+          <a href="#">Cartas</a>
+        </li>
+        <li>
+          <a href="login.html">Login</a>
+        </li>
+        <li class="agora">
+          <a href="#">Cadastro</a>
+          <!-- Ficará a imagem do avatar quando for usuário logado -->
+        </li>
+      </ul>
+    </div>
+  </div>
   <!--header fim-->
 
   <div class="login">
@@ -49,80 +49,125 @@
         <span id="mensagem_erro"></span>
       </div>
     </div>
-    <div class="container">
-      <div class="card card-cadastro">
-        <h2>Bem-vindo!</h2>
-        <div class="formulario">
-          <!--
-                         Para inserir mais um campo, copie uma das inputs abaixo.
-                         Assim que inserir vá para o script abaixo.
-                     -->
-          <div class="campo">
-            <span>Código de ativação:</span>
-            <input id="codigo_input" type="text" placeholder="Insira aqui seu código" />
+
+    <div class="login-main">
+
+
+      <div class="container">
+        <div class="card card-cadastro">
+          <h2>Bem-vindo!</h2>
+
+          <div class="formulario">
+            <!--
+            Para inserir mais um campo, copie uma das inputs abaixo.
+            Assim que inserir vá para o script abaixo.
+            -->
+
+            <!--    <div class="campo">
+            <input id="codigo_input" type="text" required/>
+            <span>Código de ativação:</span>    
+          </div>REMOVER ESTE CAMPO DEPOIS -->
+
+            <div class="campo">
+              <input id="avatar_input" type="file" />
+              <span>Escolha seu avatar:</span>
+            </div>
+
+            <div class="campo">
+              <input id="nome_input" type="text" />
+              <span>Nome:</span>
+            </div>
+
+            <div class="campo">
+              <input id="email_input" type="text" />
+              <span>E-mail:</span>
+            </div>
+
+            <div class="campo">
+              <input id="arroba_input" type="text" />
+              <span>Arroba:</span>
+            </div>
+
+            <div class="campo">
+              <input id="senha_input" type="password" oninput="validarSenha()" />
+              <span>Senha:</span>
+            </div>
+
+            <div class="campo">
+              <input id="confirmacao_senha_input" type="password" oninput="validarSenha()" />
+              <span>Confirmação da Senha:</span>
+            </div>
+
+
+            <button class="botao" onclick="cadastrar()">Cadastrar</button>
+
           </div>
-          <div class="campo">
-            <span>Nome:</span>
-            <input id="nome_input" type="text" placeholder="Seu nome" />
+
+
+          <div id="div_senha" class="tc-senha">
+            <!-- mensagens de erro de senha ou de (in)completude de requisitos para senha aqui! -->
           </div>
-          <div class="campo">
-            <span>E-mail:</span>
-            <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
+
+          <div id="div_aguardar" class="loading-div">
+            <img src="./assets/circle-loading.gif" id="loading-gif" />
           </div>
-          <div class="campo">
-            <span>Senha:</span>
-            <input id="senha_input" type="password" placeholder="******" />
-          </div>
-          <div class="campo">
-            <span>Confirmação da Senha:</span>
-            <input id="confirmacao_senha_input" type="password" placeholder="******" />
-          </div>
-          <button class="botao" onclick="cadastrar()">Cadastrar</button>
-        </div>
-        <div id="div_aguardar" class="loading-div">
-          <img src="./assets/circle-loading.gif" id="loading-gif" />
+
+
+          <div id="div_erros_login"></div>
+
         </div>
 
-        <div id="div_erros_login"></div>
       </div>
+
     </div>
+
   </div>
 
-  <!--footer inicio-->
   <div class="footer">
     <div class="container">
-      <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023-2026</h4>
-    </div>
-  </div>
-  <!--footer fim-->
+
+      <div class="dados_fic">
+        <h1 class="titulo">FicSiete</h1>
+        <h5>Todos os direitos reservados &copy; 2026</h5>
+      </div>
+
+      <div class="msg">
+        <h4>Feito com &hearts; por um aluno SPTech</h4>
+      </div> <!-- FIM msg -->
+
+    </div> <!-- FIM CONTAINER -->
+  </div> <!-- FIM FOOTER -->
 </body>
 
 </html>
 
 <script>
 
-  // Array para armazenar empresas cadastradas para validação de código de ativação 
-  let listaEmpresasCadastradas = [];
+  /* Array para armazenar empresas cadastradas para validação de código de ativação 
+  let listaEmpresasCadastradas = [];*/
 
   function cadastrar() {
     // aguardar();
 
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
+    var avatarVar = avatar_input.value;
     var nomeVar = nome_input.value;
     var emailVar = email_input.value;
+    var arrobaVar = arroba_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
-    var codigoVar = codigo_input.value;
-    var idEmpresaVincular
+    // var codigoVar = codigo_input.value;
+    // var idEmpresaVincular
 
     // Verificando se há algum campo em branco
     if (
       nomeVar == "" ||
       emailVar == "" ||
+      arrobaVar == "" ||
       senhaVar == "" ||
-      confirmacaoSenhaVar == "" ||
-      codigoVar == ""
+      confirmacaoSenhaVar == ""
+      // || codigoVar == ""
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
@@ -134,7 +179,7 @@
       setInterval(sumirMensagem, 5000);
     }
 
-    // Verificando se o código de ativação é de alguma empresa cadastrada
+    /* Verificando se o código de ativação é de alguma empresa cadastrada
     for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
       if (listaEmpresasCadastradas[i].codigo_ativacao == codigoVar) {
         idEmpresaVincular = listaEmpresasCadastradas[i].id
@@ -145,7 +190,7 @@
         mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
         finalizarAguardar();
       }
-    }
+    }*/
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -156,10 +201,12 @@
       body: JSON.stringify({
         // crie um atributo que recebe o valor recuperado aqui
         // Agora vá para o arquivo routes/usuario.js
+        avatarServer: avatarVar,
         nomeServer: nomeVar,
         emailServer: emailVar,
-        senhaServer: senhaVar,
-        idEmpresaVincularServer: idEmpresaVincular
+        arrobaServer: arrobaVar,
+        senhaServer: senhaVar
+        // , idEmpresaVincularServer: idEmpresaVincular
       }),
     })
       .then(function (resposta) {
@@ -189,7 +236,74 @@
     return false;
   }
 
-  // Listando empresas cadastradas 
+
+  function validarSenha() {
+    var nomeVar = nome_input.value;
+    var emailVar = email_input.value;
+    var arrobaVar = arroba_input.value;
+    var senhaVar = senha_input.value;
+    var confirmacaoSenhaVar = confirmacao_senha_input.value;
+
+    let retorno = '';
+    let validado = false;
+
+    let campoDeSenhaVazio = senhaVar == '' || confirmacaoSenhaVar == '';
+    let campoDeSenhaIgualNome = senhaVar == nomeVar || confirmacaoSenhaVar == nomeVar;
+    let campoDeSenhaIgualEmail = senhaVar == emailVar || confirmacaoSenhaVar == emailVar;
+    let campoDeSenhaIgualArroba = senhaVar == arrobaVar || confirmacaoSenhaVar == arrobaVar;
+
+    let invalido = campoDeSenhaVazio || campoDeSenhaIgualNome || campoDeSenhaIgualEmail || campoDeSenhaIgualArroba;
+
+    if (invalido) {
+
+      if (campoDeSenhaVazio) {
+        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
+      }
+
+      if (campoDeSenhaVazio) {
+        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
+      }
+
+      if (campoDeSenhaVazio) {
+        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
+      }
+
+      if (campoDeSenhaVazio) {
+        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
+      }
+
+
+    } else {
+
+      let vt_senha = [];
+      let vt_confSenha = [];
+
+      tamanhoSenhaVar = senhaVar.length;
+      tamanhoConfirmacaoSenhaVar = confirmacaoSenhaVar.length;
+
+      // Passando caracteres do campo "confirmação da senha" para um array
+      for (i = 0; i < tamanhoSenhaVar; i++) {
+        vt_senha += senhaVar[i];
+
+      }
+      // Passando caracteres do campo "confirmação da senha" para um array
+      for (i = 0; i < tamanhoSenhaVar; i++) {
+        vt_senha += senhaVar[i];
+
+      }
+
+
+
+      validado = true;
+    }
+
+
+
+    div_senha.innerHTML = retorno;
+
+  }
+
+  /* Listando empresas cadastradas 
   function listar() {
     fetch("/empresas/listar", {
       method: "GET",
@@ -207,7 +321,7 @@
       .catch(function (resposta) {
         console.log(`#ERRO: ${resposta}`);
       });
-  }
+  }*/
 
   function sumirMensagem() {
     cardErro.style.display = "none";

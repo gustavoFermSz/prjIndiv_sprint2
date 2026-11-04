@@ -43,12 +43,13 @@
 
 
 
-  --tamanho-banner: 95vh;
-  /*calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);*/
+  --tamanho-banner: 95vh;      /*calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);*/
   --tamanho-banner-mobile: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
+  
   --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
-  --tamanho-login: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
-  --tamanho-footer: 65px;
+
+  --tamanho-login: calc(100vh - var(--tamanho-footer));
+  --tamanho-footer: 125px;
 
 }
 
@@ -126,11 +127,13 @@ body {
 }
 
 .navbar {
-  width: 300px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+
   list-style: none;
+  padding: 0;
   color: var(--vermelho-principal);
 }
 
@@ -142,8 +145,7 @@ body {
   border-radius: 12px;
   background-color: rgba(10, 0, 5, 0.35);
 
-  font-size: var(--tamanho-fonte-titulo);
-  width: fit-content;
+  font-size: var(--tamanho-fonte-subtitulo);
 }
 
 /*
@@ -286,7 +288,7 @@ Tamanhos mais usados:
 
 .footer {
   background-color: var(--preto-principal);
-  height: 150px;
+  height: var(--tamanho-footer);
   color: #fff;
   display: flex;
   font-size: 15px;
@@ -336,31 +338,53 @@ Tamanhos mais usados:
   height: var(--tamanho-login);
   background-color: var(--branco-principal);
 
+
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.login .container {
+.login .login-main {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+
+  width: 100%;
+  height: 100%;
+}
+
+.login .login-main .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
+
+  gap: 28px;
+  padding: 4%;
+
+  width: 60%;
+  height: 80%;
 }
 
-.login .container .text-login {
+.login .login-main .container .text-login {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  gap: 8px;
 
+  padding: 4px;
   width: 100%;
   text-align: center;
 }
 
 .login .container .text-login h2.tl-title {
-  font-size: var(--tamanho-fonte-titulo);
+  font-size: var(--tamanho-fonte-principal);
   font-family: var(--fonte-titulo);
   color: var(--vermelho-principal);
+
+  margin: 0;
 
 }
 
@@ -369,6 +393,7 @@ Tamanhos mais usados:
   font-family: var(--fonte-texto);
   color: var(--preto-terciário);
   
+  margin: 0;
 }
 
 .card {
@@ -383,19 +408,19 @@ Tamanhos mais usados:
   align-items: center;
   justify-content: space-evenly;
 
-  padding: 20px 0;
+  padding: 12px 0;
 }
 
-.card h2 {
+/* .card h2 {
   margin: 0;
   font-size: 30px;
-}
+}   ITEM HTML EXCLUÍDO*/
 
 .formulario {
   display: flex;
   justify-content: space-around;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 
   height: 90%;
   width: 100%;
@@ -416,8 +441,8 @@ Tamanhos mais usados:
   width: 90%;
   height: 60px;
   margin: auto;
-  /* padding: 5px 0; */
 }
+
 
 /* FONTE PARA ESTILIZAÇÃO DOS INPUTS DESTA FORMA: https://youtu.be/kEaYpyFF9nE e https://youtu.be/Tdzas-IlKSM */
 
@@ -428,8 +453,8 @@ Tamanhos mais usados:
   color: var(--branco-secundário);
   background: transparent;
 
-  width: 100%;
-  /*text-align: center;  */
+  width: 90%;
+  text-align: left;
   font-weight: bold;
   font-size: var(--tamanho-fonte-texto-grande);
   letter-spacing: .05rem;
@@ -453,18 +478,22 @@ Tamanhos mais usados:
 .campo input:valid + span,
 .campo input:focus + span {
   height: 50%;
-  transform: translate(4px, -12px) scale(0.7);
+  line-height: 50%;
+  transform: translate(0, -8px) scale(0.7);
 
+  padding: 0 12px;
   z-index: 3;
 }
 
 .formulario .campo span {
   position: absolute;
-  left: 2%;
+  padding: 0 16px;
+  margin: 0 10px;
 
+  line-height: 52px;
   font-size: var(--tamanho-fonte-texto-grande);
   color: var(--branco-secundário);
-    background-color: var(--preto-terciário);
+  background-color: var(--preto-terciário);
 
   transition: 0.3s;
   pointer-events: none;
@@ -478,7 +507,7 @@ Tamanhos mais usados:
   align-self: center;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
-  font-size: 18px;
+  font-size: var(--tamanho-fonte-subtitulo);
   
   color: var(--branco-principal);
   background-color: var(--vermelho-principal);
@@ -487,6 +516,68 @@ Tamanhos mais usados:
   height: 30px;
   margin-top: 20px;
 }
+
+/* ---------------------------- FIM ESTILIZAÇÃO FORMULÁRIO ---------------------------- */
+
+
+.login .tl-redirect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--vermelho-principal);
+
+  padding: auto 0;
+  margin: 0;
+
+  width: 40%;
+  height: 100%;
+}
+
+.tl-redirect .card-redirect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+
+}
+
+.tl-redirect .card-redirect .topo-redirect {
+  text-align: center;
+
+}
+
+.topo-redirect .txt-redirect h3 {
+  font-size: var(--tamanho-fonte-titulo);
+}
+
+.topo-redirect .txt-redirect h5 {
+  font-size: var(--tamanho-fonte-texto-grande);
+}
+
+
+.card-redirect button {
+  text-align: center;
+
+  background-color: var(--índigo-secundário);
+  color: var(--índigo-terciário);
+  border: 2px solid var(--índigo-secundário);
+  border-radius: 8px;
+
+  font-size: var(--tamanho-fonte-subtitulo);
+}
+
+
+
+
+
+
+
+/* ---------------------------- FIM ESTILIZAÇÃO CORPO DA PÁGINA DE ---->>>> L-O-G-I-N <<<<---- ---------------------------- */
+
+
 
 .loading-div {
   width: 50px;
@@ -513,22 +604,9 @@ Tamanhos mais usados:
     height: 80vh;
   }
 
-  /* RESPONSIVIDADE DA FILEIRA DE MISSÕES */
-  .boxes {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 15px;
-    width: 100%;
-  }
+  /* RESPONSIVIDADE DA ABA QUE REDIRECIONA PARA O CADASTRO */
 
-  .box {
-    flex: 1;
-  }
 
-  .box img {
-    width: 80;
-  }
 
   /* RESPONSIVIDADE DO FOOTER */
 
