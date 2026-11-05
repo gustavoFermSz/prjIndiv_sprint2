@@ -11,7 +11,7 @@
   <script src="./js/sessao.js"></script>
 
   <link rel="stylesheet" href="./css/estilo.css" />
-  <link rel="icon" href="./assets/icon/favicon2.ico" />
+  <link rel="icon" href="./assets/icon/wordmark.png">
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
@@ -43,19 +43,19 @@
   </div>
   <!--header fim-->
 
-  <div class="login">
+  <div class="cadastro">
     <div class="alerta_erro">
       <div class="card_erro" id="cardErro">
         <span id="mensagem_erro"></span>
       </div>
     </div>
 
-    <div class="login-main">
+    <div class="cadastro-main">
 
 
       <div class="container">
+
         <div class="card card-cadastro">
-          <h2>Bem-vindo!</h2>
 
           <div class="formulario">
             <!--
@@ -63,7 +63,8 @@
             Assim que inserir vá para o script abaixo.
             -->
 
-            <!--    <div class="campo">
+            <!--    
+          <div class="campo">
             <input id="codigo_input" type="text" required/>
             <span>Código de ativação:</span>    
           </div>REMOVER ESTE CAMPO DEPOIS -->
@@ -93,6 +94,15 @@
               <span>Senha:</span>
             </div>
 
+
+
+            <!-- mensagens de erro de senha ou de (in)completude de requisitos para senha aqui! -->
+            <div id="div_validSenha" class="tc-senha">
+
+            </div>
+
+
+
             <div class="campo">
               <input id="confirmacao_senha_input" type="password" oninput="validarSenha()" />
               <span>Confirmação da Senha:</span>
@@ -104,24 +114,67 @@
           </div>
 
 
-          <div id="div_senha" class="tc-senha">
-            <!-- mensagens de erro de senha ou de (in)completude de requisitos para senha aqui! -->
-          </div>
 
           <div id="div_aguardar" class="loading-div">
             <img src="./assets/circle-loading.gif" id="loading-gif" />
           </div>
 
+          <div id="div_erros_login">
 
-          <div id="div_erros_login"></div>
+          </div>
+
 
         </div>
 
       </div>
 
+
+
+
+
+      <!-- CARD COPIADO DA TELA DE LOGIN, ALTERAR CONTEXTO DEPOIS -->
+      <div class="tl-redirect">
+
+        <div class="card-redirect">
+
+          <div class="topo-redirect">
+
+            <img src="./assets/icon/wordmark.png" width="200px" alt="ícone simples de acesso">
+
+            <div class="txt-redirect">
+
+              <h3 class="tl-desc cadastro-desc">Seu portal para aventuras medievais, cyberpunk, distópicas e muito mais.
+              </h3>
+              <h5>Crie seu perfil para montar decks de cartas, acumular pontos em quizes e criar
+                suas
+                próprias sagas narrativas.</h5>
+
+            </div>
+
+          </div>
+
+          <!--
+          <button>
+            <img src="./assets/icon/cadastro.png" alt="Ícone de cadastro">
+            Criar uma conta
+          </button>
+
+            -->
+
+        </div>
+
+      </div>
+
+
+
     </div>
 
   </div>
+
+
+
+
+
 
   <div class="footer">
     <div class="container">
@@ -141,10 +194,24 @@
 
 </html>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
 
-  /* Array para armazenar empresas cadastradas para validação de código de ativação 
-  let listaEmpresasCadastradas = [];*/
 
   function cadastrar() {
     // aguardar();
@@ -157,8 +224,16 @@
     var arrobaVar = arroba_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
-    // var codigoVar = codigo_input.value;
-    // var idEmpresaVincular
+    let validado;
+
+    if (validarSenha() == true) {
+      validado = true;
+
+    } else {
+      validado = false;
+    }
+
+
 
     // Verificando se há algum campo em branco
     if (
@@ -171,7 +246,7 @@
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
+        "Um ou mais campos em branco: insira suas informações para continuar";
 
       finalizarAguardar();
       return false;
@@ -179,18 +254,7 @@
       setInterval(sumirMensagem, 5000);
     }
 
-    /* Verificando se o código de ativação é de alguma empresa cadastrada
-    for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
-      if (listaEmpresasCadastradas[i].codigo_ativacao == codigoVar) {
-        idEmpresaVincular = listaEmpresasCadastradas[i].id
-        console.log("Código de ativação válido.");
-        break;
-      } else {
-        cardErro.style.display = "block";
-        mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
-        finalizarAguardar();
-      }
-    }*/
+
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -237,6 +301,9 @@
   }
 
 
+
+
+  /* ------------------------------------ FUNÇÃO QUE CONTÉM O LAÇO DE REPETIÇÃO E O VETOR PARA VALIDAÇÃO DA SENHA ANTES DA INSERÇÃO ------------------------------------ */
   function validarSenha() {
     var nomeVar = nome_input.value;
     var emailVar = email_input.value;
@@ -254,52 +321,174 @@
 
     let invalido = campoDeSenhaVazio || campoDeSenhaIgualNome || campoDeSenhaIgualEmail || campoDeSenhaIgualArroba;
 
-    if (invalido) {
 
-      if (campoDeSenhaVazio) {
-        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
+    let outrosCamposObrigatoriosPreenchidos = nomeVar != '' && emailVar != '' && arrobaVar != '';
+
+    /*   VALIDAÇÃO MÍNIMA, ANTES DE VER SE HÁ NÚMEROS, MAIÚSCULAS ETC   */
+    if (invalido && outrosCamposObrigatoriosPreenchidos) {
+
+
+      if (campoDeSenhaIgualNome) {
+        retorno = `<p class="retorno-senha">Senha igual ao nome: insira uma senha forte e diferente dos seus dados inseridos</p>`;
       }
 
-      if (campoDeSenhaVazio) {
-        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
+      if (campoDeSenhaIgualEmail) {
+        retorno += `<p class="retorno-senha">Senha igual ao email: insira uma senha forte e diferente dos seus dados inseridos</p>`;
       }
 
-      if (campoDeSenhaVazio) {
-        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
+      if (campoDeSenhaIgualArroba) {
+        retorno += `<p class="retorno-senha">Senha igual ao arroba: insira uma senha forte e diferente dos seus dados inseridos</p>`;
       }
 
-      if (campoDeSenhaVazio) {
-        retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span`;
-      }
+      // if (campoDeSenhaVazio) {
+      //   retorno = `<p class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</p>`;
+      // }
+
+      div_validSenha.style.display = "block";
+      div_validSenha.innerHTML = retorno;
 
 
+
+      /* CASO TENHA PASSADO, NÃO QUER DIZER QUE SERVE, SIMPLESMENTE SIGNIFICA QUE NÃO É TOTALMENTE DESCONSIDERÁVEL */
     } else {
 
       let vt_senha = [];
       let vt_confSenha = [];
 
-      tamanhoSenhaVar = senhaVar.length;
-      tamanhoConfirmacaoSenhaVar = confirmacaoSenhaVar.length;
+      let tamanhoSenhaVar = senhaVar.length;
+      let tamanhoConfirmacaoSenhaVar = confirmacaoSenhaVar.length;
 
-      // Passando caracteres do campo "confirmação da senha" para um array
-      for (i = 0; i < tamanhoSenhaVar; i++) {
+      let listaCaractEspeciais = ` ºª°§!@#$%^&*()-+=[]{};:"|,.<>/?~'`;
+      let listaNumeros = Number([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+      let possuiNumero = false;
+      let possuiCaractEspecial = false;
+      let camposConferem = vt_senha == vt_confSenha && tamanhoSenhaVar == tamanhoConfirmacaoSenhaVar;
+      let incluiLetraMaius = (senhaVar.toLowerCase() != senhaVar); // ênfase neste campo pois é o que será enviado ao BD e porque diferenças serão tratadas pelo campo acima
+      let incluiLetraMinus = (senhaVar.toUpperCase() != senhaVar);
+
+
+      div_validSenha.style.display = "block";
+
+
+      // Passando caracteres do campo "senha" para um array
+      for (let i = 0; i < tamanhoSenhaVar; i++) {
         vt_senha += senhaVar[i];
+
+        // Verificando se há algum número
+        if (listaNumeros.indexOf(Number(vt_senha[i])) >= 0) {
+          possuiNumero = true;
+        }
+
+        // Verificando se há caractere especial
+        if (listaCaractEspeciais.indexOf(senhaVar[i]) >= 0) {
+          possuiCaractEspecial = true;
+        }
 
       }
       // Passando caracteres do campo "confirmação da senha" para um array
-      for (i = 0; i < tamanhoSenhaVar; i++) {
-        vt_senha += senhaVar[i];
+      for (let i = 0; i < tamanhoConfirmacaoSenhaVar; i++) {
+        vt_confSenha += confirmacaoSenhaVar[i];
+
+        if (vt_confSenha[i] !== vt_senha[i]) {
+          camposConferem = false;
+        }
 
       }
 
 
 
-      validado = true;
+
+      let cumpreTudo = possuiNumero && camposConferem && incluiLetraMaius && incluiLetraMinus && possuiCaractEspecial;
+
+      if (cumpreTudo) { // PERMITE inserção no banco de dados
+        validado = true;
+
+        retorno = `
+        <p class="retorno-caractEspecial">Caractere especial (ex.: !@.$%")<span class="icon_validado"></span></p>
+
+        <p class="retorno-numero">Número (ex.: 9)  <span class="icon_validado"></span>  </p>
+        
+        <p class="retorno-maiusc">Letra maiúscula (ex.: A)  <span class="icon_validado"></span>  </p>
+        
+        <p class="retorno-minusc">Letra minúscula (ex.: a)  <span class="icon_validado"></span>  </p>
+        
+        <p class="retorno-conferem">Senhas são iguais  <span class="icon_validado"></span>  </p>
+        
+        `;
+
+
+      } else {
+        // PRIMEIRA VALIDAÇÃO
+        if (possuiCaractEspecial) {
+          retorno = `
+          <span class="retorno-caractEspecial">Caractere especial (ex.: !@.$%")<span class="icon_validado"></span> </span>
+          `;
+
+        } else {
+          retorno += `
+          <span class="retorno-caractEspecial r-invalido">Caractere especial (ex.: !@.$%")<span class="icon_invalido"></span> </span>
+          `;
+        }
+
+        // SEGUNDA VALIDAÇÃO
+        if (possuiNumero) {
+          retorno += `
+          <span class="retorno-numero">Número (ex.: 9)  <span class="icon_validado"></span>  </span>
+          `;
+
+        } else {
+          retorno += `
+          <span class="retorno-numero" r-invalido>Número (ex.: 9)  <span class="icon_invalido"></span> </span>
+          `;
+        }
+
+        // TERCEIRA VALIDAÇÃO
+        if (incluiLetraMaius) {
+          retorno += `
+          <span class="retorno-maiusc">Letra maiúscula (ex.: A)  <span class="icon_validado"></span>  </span>
+          `;
+
+        } else {
+          retorno += `
+          <span class="retorno-maiusc r-invalido">Letra maiúscula (ex.: A)  <span class="icon_invalido"></span> </span>
+          `;
+        }
+
+        // QUARTA VALIDAÇÃO
+        if (incluiLetraMinus) {
+          retorno += `
+          <span class="retorno-minusc">Letra minúscula (ex.: a)  <span class="icon_validado"></span>  </span>
+          `;
+
+        } else {
+          retorno += `
+          <span class="retorno-minusc r-invalido">Letra minúscula (ex.: a)  <span class="icon_invalido"></span> </span>
+          `;
+        }
+
+        // QUINTA VALIDAÇÃO
+        if (camposConferem) {
+          retorno += `
+          <span class="retorno-conferem">Senhas são iguais  <span class="icon_validado"></span>  </span>
+          `;
+
+        } else {
+          retorno += `
+          <span class="retorno-conferem r-invalido">Senhas são iguais  <span class="icon_invalido"></span></span>
+          `;
+        }
+
+
+      }
+
     }
 
 
+    div_validSenha.innerHTML = retorno;
 
-    div_senha.innerHTML = retorno;
+
+    return validado; /*  será usado para permitir ou negar inserção de registro no banco de dados ao executar função "cadastrar()" */
 
   }
 
@@ -326,4 +515,5 @@
   function sumirMensagem() {
     cardErro.style.display = "none";
   }
+
 </script>

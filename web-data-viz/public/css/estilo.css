@@ -6,7 +6,7 @@
 :root {
   --tamanho-header: 40px;
   --tamanho-header-mobile: 40px;
-  
+
   --tamanho-fonte-principal: 44px;
   --tamanho-fonte-titulo: 32px;
   --tamanho-fonte-subtitulo: 24px;
@@ -43,12 +43,14 @@
 
 
 
-  --tamanho-banner: 95vh;      /*calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);*/
+  --tamanho-banner: 95vh;
+  /*calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);*/
   --tamanho-banner-mobile: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
-  
+
   --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
 
   --tamanho-login: calc(100vh - var(--tamanho-footer));
+  --tamanho-cadastro: calc(120vh - var(--tamanho-footer));
   --tamanho-footer: 125px;
 
 }
@@ -86,19 +88,20 @@ body {
   height: var(--tamanho-header);
   width: 100%;
 
-  /* background: linear-gradient(to bottom, var(--branco-principal) 0.2%, transparent 100%); */
+  /* background: linear-gradient(to bottom, var(--branco-principal) 0.2%, transparent 100%);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
+  -webkit-mask: linear-gradient(var(--preto-principal) 40%, var(--preto-principal) 80%);
+  mask: linear-gradient(#000 60%, #0000 100%); */
 
   top: 0;
   left: 0;
   right: 0;
 
-  -webkit-mask: linear-gradient(var(--preto-principal) 40%, var(--preto-principal) 80%);
-  mask: linear-gradient(#000 60%, #0000 100%);
+  box-shadow: 0 0 8px 4px var(--índigo-secundário);
+  transition: all 0.2s ease-in-out;
 
-
-  background-color: transparent;
+  background-color: var(--branco-principal);
   border-bottom: 2px solid var(--vermelho-principal);
 }
 
@@ -119,7 +122,7 @@ body {
 }
 
 .header a:hover {
-  color: #94230f;
+  color: var(--vermelho-secundário);
 }
 
 .agora {
@@ -141,9 +144,6 @@ body {
   font-family: var(--fonte-titulo);
   font-weight: 700;
   color: var(--vermelho-principal);
-
-  border-radius: 12px;
-  background-color: rgba(10, 0, 5, 0.35);
 
   font-size: var(--tamanho-fonte-subtitulo);
 }
@@ -392,7 +392,7 @@ Tamanhos mais usados:
   font-size: var(--tamanho-fonte-texto-grande);
   font-family: var(--fonte-texto);
   color: var(--preto-terciário);
-  
+
   margin: 0;
 }
 
@@ -458,25 +458,26 @@ Tamanhos mais usados:
   font-weight: bold;
   font-size: var(--tamanho-fonte-texto-grande);
   letter-spacing: .05rem;
-  
+
   outline: none;
-  border: 2px solid var(--índigo-principal); 
+  border: 2px solid var(--índigo-principal);
   border-radius: 10px;
-  
+
   z-index: 3;
   transition: 0.1s ease-in-out;
 }
 
 .campo input:valid {
-  border: 2.5px solid var(--índigo-terciário);
-  
+  border: 2.5px solid var(--índigo-principal);
+
 }
+
 .campo input:focus {
   border: 2.5px solid var(--branco-secundário);
 }
 
-.campo input:valid + span,
-.campo input:focus + span {
+.campo input:valid+span,
+.campo input:focus+span {
   height: 50%;
   line-height: 50%;
   transform: translate(0, -8px) scale(0.7);
@@ -503,12 +504,12 @@ Tamanhos mais usados:
   cursor: pointer;
   border: 0;
   border-radius: 5px;
-  
+
   align-self: center;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
   font-size: var(--tamanho-fonte-subtitulo);
-  
+
   color: var(--branco-principal);
   background-color: var(--vermelho-principal);
 
@@ -549,12 +550,26 @@ Tamanhos mais usados:
 
 }
 
+.topo-redirect .txt-redirect {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  gap: 24px;
+  padding: 0 24px;
+}
+
 .topo-redirect .txt-redirect h3 {
   font-size: var(--tamanho-fonte-titulo);
+  padding: 0;
+  margin: auto 0;
 }
 
 .topo-redirect .txt-redirect h5 {
   font-size: var(--tamanho-fonte-texto-grande);
+  padding: 0;
+  margin: auto 0;
 }
 
 
@@ -573,12 +588,6 @@ Tamanhos mais usados:
 
 
 
-
-
-/* ---------------------------- FIM ESTILIZAÇÃO CORPO DA PÁGINA DE ---->>>> L-O-G-I-N <<<<---- ---------------------------- */
-
-
-
 .loading-div {
   width: 50px;
   display: none;
@@ -594,37 +603,112 @@ Tamanhos mais usados:
 }
 
 
-
 /* RESPONSIVIDADE DO CORPO DA TELA DE ----> LOGIN <---- */
 @media (max-width: 640px) {
-
+  
   /* RESPONSIVIDADE DO BANNER */
-
-  .banner {
-    height: 80vh;
-  }
-
+  
+  
+  
   /* RESPONSIVIDADE DA ABA QUE REDIRECIONA PARA O CADASTRO */
-
-
-
+  
+  
+  
   /* RESPONSIVIDADE DO FOOTER */
-
+  
 }
 
-/*    FIM RESPONSIVIDADES     */
+/*    FIM RESPONSIVIDADES  TELA DE LOGIN   */
+
+/* ---------------------------- FIM ESTILIZAÇÃO CORPO DA PÁGINA DE ---->>>> L-O-G-I-N <<<<---- ---------------------------- */
 
 
 
 
 
+/* --------------------- ESTILIZAÇÃO DA TELA DE CADASTRO --------------------- */
+
+.cadastro {
+  height: var(--tamanho-cadastro);
+  background-color: var(--branco-principal);
 
 
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cadastro .cadastro-main {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+
+  width: 100%;
+  height: 100%;
+}
 
 
+.card .card-cadastro {
+  height: fit-content;
+}
 
+.text-login h5.cadastro {
+  text-align: justify;
 
+  margin: 0;
+}
 
+/* ------------------------ VALIDAÇÃO DE SENHA ------------------------ */
+
+.tc-senha {
+  font-size: var(--tamanho-fonte-texto-pequeno);
+  color: var(--índigo-terciário);
+  border: 2px solid var(--vermelho-secundário);
+  border-radius: 8px;
+  text-align: left;
+
+  height: 100px;
+  width: 90%;
+  padding: 2px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: auto;
+
+  display: none;
+}
+/* .tc-senha .retorno-senha {
+  color: purple;
+} */
+
+.tc-senha .r-invalido {
+  color: var(--vermelho-terciário);
+}
+
+.tc-senha .icon_validado {
+  display: inline-block;
+  background-image: url(/public/assets/icon/iconeV.png);
+  background-size: contain;
+
+  color: var(--índigo-terciário);
+  width: 24px;
+  height: 24px;
+}
+
+.tc-senha .icon_invalido {
+  display: inline-block;
+  background-image: url(/public/assets/icon/iconeX.png);
+  background-size: contain;
+  
+  color: var(--vermelho-terciário);
+  height: 24px;
+  width: 24px;
+}
 
 
 
