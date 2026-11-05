@@ -359,7 +359,7 @@
       let tamanhoConfirmacaoSenhaVar = confirmacaoSenhaVar.length;
 
       let listaCaractEspeciais = ` ºª°§!@#$%^&*()-+=[]{};:"|,.<>/?~'`;
-      let listaNumeros = Number([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      let listaNumeros = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
       let possuiNumero = false;
       let possuiCaractEspecial = false;
@@ -376,7 +376,7 @@
         vt_senha += senhaVar[i];
 
         // Verificando se há algum número
-        if (listaNumeros.indexOf(Number(vt_senha[i])) >= 0) {
+        if (listaNumeros.includes(Number(vt_senha[i]))) {
           possuiNumero = true;
         }
 
@@ -439,7 +439,7 @@
 
         } else {
           retorno += `
-          <span class="retorno-numero" r-invalido>Número (ex.: 9)  <span class="icon_invalido"></span> </span>
+          <span class="retorno-numero r-invalido">Número (ex.: 9)  <span class="icon_invalido"></span> </span>
           `;
         }
 
