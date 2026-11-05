@@ -2,86 +2,95 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>FicSiete - Home</title>
+  <title>FicSiete - Home</title>
 
-    <script src="./js/sessao.js"></script>
+  <script src="./js/sessao.js"></script>
 
-    <link rel="stylesheet" href="./css/estilo.css">
-    <link rel="icon" href="./assets/icon/wordmark.png">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="./css/estilo.css">
+  <link rel="icon" href="./assets/icon/wordmark.png">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
 <body>
-    <div class="header">
-      <div class="container">
+  <!--Header-->
+
+  <div class="header">
+    <div class="container">
+      <h1 class="titulo">FicSiete</h1>
+      <ul class="navbar">
+        <li class="agora">
+          <a href="#">Home</a>
+        </li>
+        <li>
+          <a href="#">Quizes</a>
+        </li>
+        <li>|</li>
+        <li>
+          <a href="#">Cartas</a>
+        </li>
+        <li>
+          <a href="login.html">Login</a>
+        </li>
+        <li>
+          <a href="cadastro.html">Cadastro</a>
+          <!-- Ficará a imagem do avatar quando for usuário logado -->
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="banner">
+    <div class="container">
+      <p>Onde as suas <span>histórias preferidas</span> se encontram.</p>
+    </div>
+  </div>
+
+  <div class="social">
+    <div class="container">
+      <div class="boxes">
+        <div class="box">
+          <img src="assets/imgs/icon_publicacao.png">
+          <h4>Publicações</h4>
+          <p>Descreva como uma obra te impactou, tire uma dúvida sobre a sua lore, publique uma pequena fanfic sobre
+            alguns de seus personagens: você tem liberdade para demonstrar todo o seu carinho por uma obra, com
+            respeito.</p>
+        </div>
+        <div class="box">
+          <img src="assets/imgs/icon_quiz.png">
+          <h4>Quizes</h4>
+          <p>Desafie-se, aos demais internautas e aos seus amigos em quizes sobre as histórias e mundos que te marcaram
+            e demonstre quem é que sabe. Atenção: não aceitamos que joga sujo, então, nada de pesquisar na hora do Quiz!
+          </p>
+        </div>
+        <div class="box">
+          <img src="assets/imgs/icon_card.png">
+          <h4>Cartas</h4>
+          <p>Pensou em Yu-Gi-Oh? É exatamente isso. Você escolhe o personagem, o universo, as cores, os poderes, e a
+            descrição da carta - e deixa o resto conosco. Você já quis fazer a carta do seu personagem favorito antes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="container">
+
+      <div class="dados_fic">
         <h1 class="titulo">FicSiete</h1>
-        <ul class="navbar">
-          <li class="agora">
-            <a href="#">Home</a>
-          </li>
-          <li>
-            <a href="simulador.html">Quizes</a>
-          </li>
-          <li>|</li>
-          <li>
-            <a href="#">Cartas</a>
-          </li>
-          <li>
-            <a href="login.html">Login</a>
-          </li>
-          <li>
-            <a href="cadastro.html">Cadastro</a> <!-- Ficará a imagem do avatar quando for usuário logado -->
-          </li>
-        </ul>
+        <h5>Todos os direitos reservados &copy; 2026</h5>
       </div>
-    </div>
-  
-    <div class="banner">
-      <div class="container">
-        <p>Onde as suas <span>histórias preferidas</span> se encontram.</p>
-      </div>
-    </div>
-  
-    <div class="social">
-      <div class="container">
-        <div class="boxes">
-          <div class="box">
-            <img src="assets/imgs/icon_publicacao.png">
-            <h4>Publicações</h4>
-            <p>Descreva como uma obra te impactou, tire uma dúvida sobre a sua lore, publique uma pequena fanfic sobre alguns de seus personagens: você tem liberdade para demonstrar todo o seu carinho por uma obra, com respeito.</p>
-          </div>
-          <div class="box">
-            <img src="assets/imgs/icon_quiz.png">
-            <h4>Quizes</h4>
-            <p>Desafie-se, aos demais internautas e aos seus amigos em quizes sobre as histórias e mundos que te marcaram e demonstre quem é que sabe. Atenção: não aceitamos que joga sujo, então, nada de pesquisar na hora do Quiz!</p>
-          </div>
-          <div class="box">
-            <img src="assets/imgs/icon_card.png">
-            <h4>Cartas</h4>
-            <p>Pensou em Yu-Gi-Oh? É exatamente isso. Você escolhe o personagem, o universo, as cores, os poderes, e a descrição da carta - e deixa o resto conosco. Você já pensou em fazer a carta do seu personagem favorito antes.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <div class="footer">
-      <div class="container">
 
-        <div class="dados_fic">
-          <h1 class="titulo">FicSiete</h1>
-          <h5>Todos os direitos reservados &copy; 2026</h5>
-        </div>
+      <div class="msg">
+        <h4>Feito com &hearts; por um aluno SPTech</h4>
+      </div> <!-- FIM msg -->
 
-        <div class="msg">
-          <h4>Feito com &hearts; por um aluno SPTech</h4>
-        </div> <!-- FIM msg -->
-
-      </div> <!-- FIM CONTAINER -->
-    </div> <!-- FIM FOOTER -->
-  </body>
+    </div> <!-- FIM CONTAINER -->
+  </div> <!-- FIM FOOTER -->
+</body>
 
 </html>

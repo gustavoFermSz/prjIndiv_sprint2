@@ -7,6 +7,7 @@
   --tamanho-header: 40px;
   --tamanho-header-mobile: 40px;
 
+  --tamanho-fonte-serifada-principal: 52px;
   --tamanho-fonte-principal: 44px;
   --tamanho-fonte-titulo: 32px;
   --tamanho-fonte-subtitulo: 24px;
@@ -22,7 +23,7 @@
 
   --branco-principal: #EAF1FF;
   --branco-secundário: #F3F0F5;
-  --branco-terciário: #FFEEE0;
+  --branco-terciário: whitesmoke;
 
   --preto-principal: #1A1A1E;
   --preto-secundário: #000000;
@@ -49,8 +50,8 @@
 
   --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
 
-  --tamanho-login: calc(100vh - var(--tamanho-footer));
-  --tamanho-cadastro: calc(120vh - var(--tamanho-footer));
+  --tamanho-login: calc(110vh - var(--tamanho-footer));
+  --tamanho-cadastro: calc(130vh - var(--tamanho-footer));
   --tamanho-footer: 125px;
 
 }
@@ -82,24 +83,25 @@ body {
   margin: auto;
 }
 
-/*  Site utilizado de inspiração: https://www.thewitcher.com/br/pt-br/witcher3  */
 .header {
-  position: fixed;
+  position: sticky;
   height: var(--tamanho-header);
   width: 100%;
 
+  /*  Site utilizado de inspiração: https://www.thewitcher.com/br/pt-br/witcher3  */
   /* background: linear-gradient(to bottom, var(--branco-principal) 0.2%, transparent 100%);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   -webkit-mask: linear-gradient(var(--preto-principal) 40%, var(--preto-principal) 80%);
   mask: linear-gradient(#000 60%, #0000 100%); */
 
+  z-index: 10;
   top: 0;
   left: 0;
   right: 0;
 
-  box-shadow: 0 0 8px 4px var(--índigo-secundário);
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 8px 4px var(--preto-terciário);
+  transition: all 0.2s ease-in-out;   /* nem lembro pra que isso existe */
 
   background-color: var(--branco-principal);
   border-bottom: 2px solid var(--vermelho-principal);
@@ -287,6 +289,7 @@ Tamanhos mais usados:
 /* FOOTER */
 
 .footer {
+  position: sticky;
   background-color: var(--preto-principal);
   height: var(--tamanho-footer);
   color: #fff;
@@ -380,11 +383,11 @@ Tamanhos mais usados:
 }
 
 .login .container .text-login h2.tl-title {
-  font-size: var(--tamanho-fonte-principal);
+  font-size: var(--tamanho-fonte-serifada-principal);
   font-family: var(--fonte-titulo);
   color: var(--vermelho-principal);
 
-  margin: 0;
+  margin: auto 0;
 
 }
 
@@ -398,7 +401,7 @@ Tamanhos mais usados:
 
 .card {
   height: fit-content;
-  width: 75%;
+  width: 60%;
   color: var(--branco-secundário);
   background-color: var(--preto-terciário);
   border-radius: 10px;
@@ -411,13 +414,10 @@ Tamanhos mais usados:
   padding: 12px 0;
 }
 
-/* .card h2 {
-  margin: 0;
-  font-size: 30px;
-}   ITEM HTML EXCLUÍDO*/
-
+    /* --------------------- INÍCIO ESTILIZAÇÃO DOS FORMULÁRIOS DE CADASTRO E LOGIN! ---------------------*/
 .formulario {
   display: flex;
+  align-items: center;
   justify-content: space-around;
   flex-direction: column;
   gap: 16px;
@@ -426,21 +426,19 @@ Tamanhos mais usados:
   width: 100%;
 }
 
-.formulario select {
+/* .formulario select {
   border: 2px solid #32b9cd;
   background-color: white;
   color: gray;
   height: 36px;
-  text-align: center;
   border-radius: 10px;
   margin: 0;
-}
+} */
 
 .campo {
   position: relative;
   width: 90%;
   height: 60px;
-  margin: auto;
 }
 
 
@@ -489,7 +487,7 @@ Tamanhos mais usados:
 .formulario .campo span {
   position: absolute;
   padding: 0 16px;
-  margin: 0 10px;
+  margin: auto 10px;
 
   line-height: 52px;
   font-size: var(--tamanho-fonte-texto-grande);
@@ -500,6 +498,37 @@ Tamanhos mais usados:
   pointer-events: none;
 }
 
+/* ------------------------ INÍCIO BLOCO ESTILIZADO PELA IA OPENCODE ------------------------ */
+
+
+/* Estilo simples para input de arquivo do avatar */
+.formulario input.avatar_input {
+  width: 80%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--branco-principal); /* combina com o resto do formulário */
+  background: var(--preto-principal);
+  color: var(--branco-principal);
+  cursor: pointer;
+  text-align: left; /* mostra o nome do arquivo à esquerda */
+}
+/* Personaliza o botão interno em navegadores WebKit */
+.formulario input.avatar_input::-webkit-file-upload-button {
+  padding: 6px 10px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 6px;
+  background: var(--índigo-terciário);
+  color: var(--preto-principal);
+  cursor: pointer;
+}
+/* Fallback para IE/Edge antigos */
+.formulario input.avatar_input::-ms-value {
+  color: var(--branco-principal);
+}
+
+
+/* ------------------------ FIM BLOCO ESTILIZADO PELA IA OPENCODE ------------------------ */
 .botao {
   cursor: pointer;
   border: 0;
@@ -521,13 +550,14 @@ Tamanhos mais usados:
 /* ---------------------------- FIM ESTILIZAÇÃO FORMULÁRIO ---------------------------- */
 
 
-.login .tl-redirect {
+.tl-redirect {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
   background-color: var(--vermelho-principal);
+  color: var(--preto-secundário);
 
   padding: auto 0;
   margin: 0;
@@ -540,6 +570,8 @@ Tamanhos mais usados:
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  gap: 8%;
 
   width: 100%;
 
@@ -557,31 +589,59 @@ Tamanhos mais usados:
   align-items: center;
 
   gap: 24px;
-  padding: 0 24px;
+  padding: 0 32px;
 }
 
 .topo-redirect .txt-redirect h3 {
-  font-size: var(--tamanho-fonte-titulo);
-  padding: 0;
+  font-size: var(--tamanho-fonte-principal);
   margin: auto 0;
 }
 
 .topo-redirect .txt-redirect h5 {
-  font-size: var(--tamanho-fonte-texto-grande);
-  padding: 0;
+  font-size: var(--tamanho-fonte-subtitulo);
   margin: auto 0;
 }
 
 
 .card-redirect button {
-  text-align: center;
+  width: 50%;
+  padding: 0;
 
-  background-color: var(--índigo-secundário);
-  color: var(--índigo-terciário);
+  background-color: var(--branco-principal);
+  color: var(--índigo-secundário);
   border: 2px solid var(--índigo-secundário);
+
   border-radius: 8px;
 
   font-size: var(--tamanho-fonte-subtitulo);
+  transition: 0.3s ease;
+}
+
+.card-redirect button:hover {
+  background-color: var(--índigo-principal);
+  color: var(--preto-principal);
+  border-color: var(--preto-principal);
+
+  a {
+    color: var(--preto-principal);
+  }
+}
+
+.card-redirect button a {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  width: 100%;
+  padding: 2px 0;
+  margin: 0;
+  height: 100%;
+
+  text-decoration: none;
+  text-align: center;
+  color: var(--índigo-secundário);
 }
 
 
@@ -605,17 +665,17 @@ Tamanhos mais usados:
 
 /* RESPONSIVIDADE DO CORPO DA TELA DE ----> LOGIN <---- */
 @media (max-width: 640px) {
-  
+
   /* RESPONSIVIDADE DO BANNER */
-  
-  
-  
+
+
+
   /* RESPONSIVIDADE DA ABA QUE REDIRECIONA PARA O CADASTRO */
-  
-  
-  
+
+
+
   /* RESPONSIVIDADE DO FOOTER */
-  
+
 }
 
 /*    FIM RESPONSIVIDADES  TELA DE LOGIN   */
@@ -626,7 +686,7 @@ Tamanhos mais usados:
 
 
 
-/* --------------------- ESTILIZAÇÃO DA TELA DE CADASTRO --------------------- */
+/* --------------------------------------------------------------- ESTILIZAÇÃO DA TELA DE CADASTRO --------------------------------------------------------------- */
 
 .cadastro {
   height: var(--tamanho-cadastro);
@@ -648,40 +708,83 @@ Tamanhos mais usados:
   height: 100%;
 }
 
+.cadastro-main .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 28px;
+  padding: 4px;
+
+  width: 60%;
+  height: 90%;
+}
+
 
 .card .card-cadastro {
   height: fit-content;
 }
 
-.text-login h5.cadastro {
-  text-align: justify;
+.cadastro-main .tl-redirect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
+
+  padding: auto 0;
   margin: 0;
+
+  width: 40%;
+  height: 100%;
+  background-color: var(--preto-terciário);
+  color: var(--vermelho-terciário);
 }
+
+.cadastro-main h3.tl-desc {
+  font-size: var(--tamanho-fonte-titulo);
+
+}
+
+.cadastro-main .txt-redirect h5 {
+  font-size: var(--tamanho-fonte-texto-grande);
+
+}
+
+
+
 
 /* ------------------------ VALIDAÇÃO DE SENHA ------------------------ */
 
 .tc-senha {
   font-size: var(--tamanho-fonte-texto-pequeno);
-  color: var(--índigo-terciário);
+  color: var(--vermelho-terciário);
   border: 2px solid var(--vermelho-secundário);
   border-radius: 8px;
   text-align: left;
 
   height: 100px;
-  width: 90%;
+  width: 80%;
   padding: 2px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
 
   margin: auto;
 
-  display: none;
 }
+
+.tc-senha span {
+  display: inline-flex;
+  width: 25%;
+  margin: 0;
+}
+
 /* .tc-senha .retorno-senha {
   color: purple;
 } */
@@ -690,34 +793,17 @@ Tamanhos mais usados:
   color: var(--vermelho-terciário);
 }
 
-.tc-senha .icon_validado {
-  display: inline-block;
-  background-image: url(/public/assets/icon/iconeV.png);
-  background-size: contain;
-
-  color: var(--índigo-terciário);
-  width: 24px;
-  height: 24px;
-}
-
-.tc-senha .icon_invalido {
-  display: inline-block;
-  background-image: url(/public/assets/icon/iconeX.png);
-  background-size: contain;
-  
-  color: var(--vermelho-terciário);
-  height: 24px;
-  width: 24px;
-}
 
 
 
 
-/* FORMULARIO */
+
+/* CÓDIGO ANTIGO DE FORMULARIO, APENAS CÓDIGOS DE ERROS E LOADINGS SEGUEM RELEVANTES */
 
 .alerta_erro {
   display: flex;
   justify-content: flex-end;
+  z-index: 10;
 }
 
 .card_erro {
@@ -736,7 +822,7 @@ Tamanhos mais usados:
   font-weight: 500;
   font-size: 20px;
 }
-
+/*    NÃO MAIS RELEVANTE
 .formulario .tipo_campo {
   font-size: 20px;
   font-weight: 600 !important;
@@ -745,6 +831,7 @@ Tamanhos mais usados:
 .formulario {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 input {
@@ -754,6 +841,7 @@ input {
   text-align: center;
   border-radius: 10px;
 }
+*/
 
 .btn {
   font-family: "Barlow", sans-serif;
@@ -779,6 +867,64 @@ input {
   height: 50px;
   width: 50px;
 }
+
+
+
+/* RESPONSIVIDADE DO CORPO DA TELA DE --------------------> CADASTRO <-------------------- */
+@media (max-height: 800px) {
+
+  /* Ajustando o tamanho do corpo para que itens não estourem o tamanho máximo */
+  .cadastro {
+    height: calc(var(--tamanho-cadastro) + 25vh);
+  }
+
+}
+
+@media (max-width: 640px) {
+  /* RESPONSIVIDADE DO CORPO DA PÁGINA PARA TABLETS E MOBILE*/
+  .cadastro .cadastro-main {
+    display: flex;
+    flex-direction: column;
+
+  }
+
+
+  /* RESPONSIVIDADE DO FOOTER */
+
+}
+
+/*    FIM RESPONSIVIDADES  TELA DE CADASTRO   */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* SIMULADOR */
 

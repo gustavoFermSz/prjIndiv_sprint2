@@ -25,7 +25,7 @@
           <a href="index.html">Home</a>
         </li>
         <li>
-          <a href="simulador.html">Quizes</a>
+          <a href="#">Quizes</a>
         </li>
         <li>|</li>
         <li>
@@ -55,19 +55,20 @@
 
       <div class="container">
 
+
         <div class="card card-cadastro">
 
+          <div class="text-login">
+            <h2 class="tl-title">Cadastre-se em nosso site</h2>
+          </div>
+
+          <!-- INÍCIO FORMULÁRIO! -->
           <div class="formulario">
             <!--
             Para inserir mais um campo, copie uma das inputs abaixo.
             Assim que inserir vá para o script abaixo.
             -->
 
-            <!--    
-          <div class="campo">
-            <input id="codigo_input" type="text" required/>
-            <span>Código de ativação:</span>    
-          </div>REMOVER ESTE CAMPO DEPOIS -->
 
             <div class="campo">
               <input id="avatar_input" type="file" />
@@ -75,22 +76,23 @@
             </div>
 
             <div class="campo">
-              <input id="nome_input" type="text" />
+              <input id="nome_input" type="text" placeholder="Ex.: Júlio Medeiros da Silva" />
               <span>Nome:</span>
             </div>
 
             <div class="campo">
-              <input id="email_input" type="text" />
+              <input id="email_input" type="text" placeholder="Ex.: julio.m@email.com" />
               <span>E-mail:</span>
             </div>
 
             <div class="campo">
-              <input id="arroba_input" type="text" />
+              <input id="arroba_input" type="text" placeholder="Ex.: julio_medeiros:D" />
               <span>Arroba:</span>
             </div>
 
             <div class="campo">
-              <input id="senha_input" type="password" oninput="validarSenha()" />
+              <input id="senha_input" type="password" oninput="validarSenha()"
+                placeholder="Insira sua senha forte aqui" />
               <span>Senha:</span>
             </div>
 
@@ -98,20 +100,31 @@
 
             <!-- mensagens de erro de senha ou de (in)completude de requisitos para senha aqui! -->
             <div id="div_validSenha" class="tc-senha">
+              <span id="caractEspecial" class="retorno-caractEspecial">Caractere especial (ex.: !@.$%")</span>
 
+              <span id="numero" class="retorno-numero">Número (ex.: 9)</span>
+
+              <span id="maiusc" class="retorno-maiusc">Letra maiúscula (ex.: A)</span>
+
+              <span id="minusc" class="retorno-minusc">Letra minúscula (ex.: a)</span>
+
+              <span id="tamanho" class="retorno-tamanho">Ao menos 8 caracteres</span>
+
+              <span id="conferem" class="retorno-conferem">Senhas são iguais</span>
             </div>
 
 
 
             <div class="campo">
-              <input id="confirmacao_senha_input" type="password" oninput="validarSenha()" />
+              <input id="confirmacao_senha_input" type="password" oninput="validarSenha()"
+                placeholder="Confirme a senha inserida" />
               <span>Confirmação da Senha:</span>
             </div>
 
 
             <button class="botao" onclick="cadastrar()">Cadastrar</button>
 
-          </div>
+          </div> <!-- FIM DO FORMULÁRIO-->
 
 
 
@@ -143,11 +156,8 @@
 
             <div class="txt-redirect">
 
-              <h3 class="tl-desc cadastro-desc">Seu portal para aventuras medievais, cyberpunk, distópicas e muito mais.
-              </h3>
-              <h5>Crie seu perfil para montar decks de cartas, acumular pontos em quizes e criar
-                suas
-                próprias sagas narrativas.</h5>
+              <h3 class="tl-desc">Seu portal para aventuras medievais, cyberpunk, distópicas e muito mais.</h3>
+              <h5>Efetue o cadastro agora e tenha acesso à nossa comunidade.</h5>
 
             </div>
 
@@ -340,17 +350,20 @@
         retorno += `<p class="retorno-senha">Senha igual ao arroba: insira uma senha forte e diferente dos seus dados inseridos</p>`;
       }
 
-      // if (campoDeSenhaVazio) {
-      //   retorno = `<p class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</p>`;
-      // }
+      if (campoDeSenhaVazio) {
+        retorno = `<p class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</p>`;
+      }
 
-      div_validSenha.style.display = "block";
-      div_validSenha.innerHTML = retorno;
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = retorno;
 
-
+      finalizarAguardar();
+      // return false; NÃO SEI O QUE ESSA LINHA DEVERIA FAZER, ACHO QUE SERVE SOMENTE À FUNÇÃO PRINCIPAL
+      setInterval(sumirMensagem, 5000);
 
       /* CASO TENHA PASSADO, NÃO QUER DIZER QUE SERVE, SIMPLESMENTE SIGNIFICA QUE NÃO É TOTALMENTE DESCONSIDERÁVEL */
     } else {
+
 
       let vt_senha = [];
       let vt_confSenha = [];
@@ -366,9 +379,10 @@
       let camposConferem = vt_senha == vt_confSenha && tamanhoSenhaVar == tamanhoConfirmacaoSenhaVar;
       let incluiLetraMaius = (senhaVar.toLowerCase() != senhaVar); // ênfase neste campo pois é o que será enviado ao BD e porque diferenças serão tratadas pelo campo acima
       let incluiLetraMinus = (senhaVar.toUpperCase() != senhaVar);
+      let maisDe7Caract = tamanhoSenhaVar >= 8 /* && tamanhoConfirmacaoSenhaVar >= 8 */;
 
 
-      div_validSenha.style.display = "block";
+      // div_validSenha.style.display = "flex";
 
 
       // Passando caracteres do campo "senha" para um array
@@ -399,84 +413,71 @@
 
 
 
-      let cumpreTudo = possuiNumero && camposConferem && incluiLetraMaius && incluiLetraMinus && possuiCaractEspecial;
+      let cumpreTudo = possuiNumero && camposConferem && incluiLetraMaius && incluiLetraMinus && possuiCaractEspecial && maisDe7Caract;
 
       if (cumpreTudo) { // PERMITE inserção no banco de dados
         validado = true;
 
-        retorno = `
-        <p class="retorno-caractEspecial">Caractere especial (ex.: !@.$%")<span class="icon_validado"></span></p>
+        caractEspecial.style.color = 'var(--índigo-terciário)';
+        
+        numero.style.color = 'var(--índigo-terciário)';
 
-        <p class="retorno-numero">Número (ex.: 9)  <span class="icon_validado"></span>  </p>
-        
-        <p class="retorno-maiusc">Letra maiúscula (ex.: A)  <span class="icon_validado"></span>  </p>
-        
-        <p class="retorno-minusc">Letra minúscula (ex.: a)  <span class="icon_validado"></span>  </p>
-        
-        <p class="retorno-conferem">Senhas são iguais  <span class="icon_validado"></span>  </p>
-        
-        `;
+        maiusc.style.color = 'var(--índigo-terciário)';
+
+        minusc.style.color = 'var(--índigo-terciário)';
+
+        tamanho.style.color = 'var(--índigo-terciário)';
+
+        conferem.style.color = 'var(--índigo-terciário)';
 
 
       } else {
         // PRIMEIRA VALIDAÇÃO
         if (possuiCaractEspecial) {
-          retorno = `
-          <span class="retorno-caractEspecial">Caractere especial (ex.: !@.$%")<span class="icon_validado"></span> </span>
-          `;
+          caractEspecial.style.color = 'var(--índigo-terciário)';
 
         } else {
-          retorno += `
-          <span class="retorno-caractEspecial r-invalido">Caractere especial (ex.: !@.$%")<span class="icon_invalido"></span> </span>
-          `;
+          caractEspecial.style.color = 'var(--vermelho-terciário)';
         }
 
         // SEGUNDA VALIDAÇÃO
         if (possuiNumero) {
-          retorno += `
-          <span class="retorno-numero">Número (ex.: 9)  <span class="icon_validado"></span>  </span>
-          `;
+          numero.style.color = 'var(--índigo-terciário)';
 
         } else {
-          retorno += `
-          <span class="retorno-numero r-invalido">Número (ex.: 9)  <span class="icon_invalido"></span> </span>
-          `;
+          numero.style.color = 'var(--vermelho-terciário)';
         }
 
         // TERCEIRA VALIDAÇÃO
         if (incluiLetraMaius) {
-          retorno += `
-          <span class="retorno-maiusc">Letra maiúscula (ex.: A)  <span class="icon_validado"></span>  </span>
-          `;
+          maiusc.style.color = 'var(--índigo-terciário)';
 
         } else {
-          retorno += `
-          <span class="retorno-maiusc r-invalido">Letra maiúscula (ex.: A)  <span class="icon_invalido"></span> </span>
-          `;
+          maiusc.style.color = 'var(--vermelho-terciário)';
         }
 
         // QUARTA VALIDAÇÃO
         if (incluiLetraMinus) {
-          retorno += `
-          <span class="retorno-minusc">Letra minúscula (ex.: a)  <span class="icon_validado"></span>  </span>
-          `;
+          minusc.style.color = 'var(--índigo-terciário)';
 
         } else {
-          retorno += `
-          <span class="retorno-minusc r-invalido">Letra minúscula (ex.: a)  <span class="icon_invalido"></span> </span>
-          `;
+          minusc.style.color = 'var(--vermelho-terciário)';
         }
 
         // QUINTA VALIDAÇÃO
-        if (camposConferem) {
-          retorno += `
-          <span class="retorno-conferem">Senhas são iguais  <span class="icon_validado"></span>  </span>
-          `;
+        if (maisDe7Caract) {
+          tamanho.style.color = 'var(--índigo-terciário)';
 
         } else {
-          retorno += `
-          <span class="retorno-conferem r-invalido">Senhas são iguais  <span class="icon_invalido"></span></span>
-          `;
+          tamanho.style.color = 'var(--vermelho-terciário)';
+        }
+
+        // SEXTA VALIDAÇÃO
+        if (camposConferem) {
+          conferem.style.color = 'var(--índigo-terciário)';
+
+        } else {
+          conferem.style.color = 'var(--vermelho-terciário)';
         }
 
 
@@ -485,7 +486,7 @@
     }
 
 
-    div_validSenha.innerHTML = retorno;
+    // div_validSenha.innerHTML = retorno;
 
 
     return validado; /*  será usado para permitir ou negar inserção de registro no banco de dados ao executar função "cadastrar()" */
