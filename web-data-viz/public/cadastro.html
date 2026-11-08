@@ -69,7 +69,6 @@
             Assim que inserir vá para o script abaixo.
             -->
 
-
             <div class="campo">
               <input id="avatar_input" type="file" />
               <span>Escolha seu avatar:</span>
@@ -77,23 +76,23 @@
 
             <div class="campo">
               <input id="nome_input" type="text" placeholder="Ex.: Júlio Medeiros da Silva" />
-              <span>Nome:</span>
+              <span>Nome*:</span>
             </div>
 
             <div class="campo">
               <input id="email_input" type="text" placeholder="Ex.: julio.m@email.com" />
-              <span>E-mail:</span>
+              <span>E-mail*:</span>
             </div>
 
             <div class="campo">
               <input id="arroba_input" type="text" placeholder="Ex.: julio_medeiros:D" />
-              <span>Arroba:</span>
+              <span>Arroba*:</span>
             </div>
 
             <div class="campo">
               <input id="senha_input" type="password" oninput="validarSenha()"
                 placeholder="Insira sua senha forte aqui" />
-              <span>Senha:</span>
+              <span>Senha*:</span>
             </div>
 
 
@@ -118,7 +117,7 @@
             <div class="campo">
               <input id="confirmacao_senha_input" type="password" oninput="validarSenha()"
                 placeholder="Confirme a senha inserida" />
-              <span>Confirmação da Senha:</span>
+              <span>Confirmação da Senha*:</span>
             </div>
 
 
@@ -213,13 +212,6 @@
 
 
 
-
-
-
-
-
-
-
 <script>
 
 
@@ -245,14 +237,9 @@
 
 
 
-    // Verificando se há algum campo em branco
+    /* Verificando se há algum campo em branco*/
     if (
-      nomeVar == "" ||
-      emailVar == "" ||
-      arrobaVar == "" ||
-      senhaVar == "" ||
-      confirmacaoSenhaVar == ""
-      // || codigoVar == ""
+      nomeVar == "" || emailVar == "" || arrobaVar == "" || senhaVar == "" || confirmacaoSenhaVar == ""
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
@@ -260,11 +247,17 @@
 
       finalizarAguardar();
       return false;
+
     } else {
       setInterval(sumirMensagem, 5000);
+
+    }       /*MANTIDO APENAS PARA DISSECAR NUM FUTURO BREVE */
+
+
+
+    if (avatarVar == undefined || avatarVar == '') {
+      // avatar = URL('./ass');
     }
-
-
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -272,6 +265,7 @@
       headers: {
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({
         // crie um atributo que recebe o valor recuperado aqui
         // Agora vá para o arquivo routes/usuario.js
@@ -279,12 +273,14 @@
         nomeServer: nomeVar,
         emailServer: emailVar,
         arrobaServer: arrobaVar,
-        senhaServer: senhaVar
-        // , idEmpresaVincularServer: idEmpresaVincular
+        senhaServer: senhaVar,
+        confirmacaoSenhaServer: confirmacaoSenhaVar
       }),
-    })
+
+    }) // FIM FETCH
       .then(function (resposta) {
         console.log("resposta: ", resposta);
+
 
         if (resposta.ok) {
           cardErro.style.display = "block";
@@ -298,13 +294,17 @@
 
           limparFormulario();
           finalizarAguardar();
+
         } else {
           throw "Houve um erro ao tentar realizar o cadastro!";
+
         }
+
       })
       .catch(function (resposta) {
         console.log(`#ERRO: ${resposta}`);
         finalizarAguardar();
+
       });
 
     return false;
@@ -324,12 +324,12 @@
     let retorno = '';
     let validado = false;
 
-    let campoDeSenhaVazio = senhaVar == '' || confirmacaoSenhaVar == '';
+    // let campoDeSenhaVazio = senhaVar == '' || confirmacaoSenhaVar == '';
     let campoDeSenhaIgualNome = senhaVar == nomeVar || confirmacaoSenhaVar == nomeVar;
     let campoDeSenhaIgualEmail = senhaVar == emailVar || confirmacaoSenhaVar == emailVar;
     let campoDeSenhaIgualArroba = senhaVar == arrobaVar || confirmacaoSenhaVar == arrobaVar;
 
-    let invalido = campoDeSenhaVazio || campoDeSenhaIgualNome || campoDeSenhaIgualEmail || campoDeSenhaIgualArroba;
+    let invalido = campoDeSenhaIgualNome || campoDeSenhaIgualEmail || campoDeSenhaIgualArroba;
 
 
     let outrosCamposObrigatoriosPreenchidos = nomeVar != '' && emailVar != '' && arrobaVar != '';
@@ -339,31 +339,31 @@
 
 
       if (campoDeSenhaIgualNome) {
-        retorno = `<p class="retorno-senha">Senha igual ao nome: insira uma senha forte e diferente dos seus dados inseridos</p>`;
+        retorno = `<span class="retorno-senha">Senha igual ao nome: insira uma senha forte e diferente dos seus dados inseridos</span>`;
       }
 
       if (campoDeSenhaIgualEmail) {
-        retorno += `<p class="retorno-senha">Senha igual ao email: insira uma senha forte e diferente dos seus dados inseridos</p>`;
+        retorno += `<span class="retorno-senha">Senha igual ao email: insira uma senha forte e diferente dos seus dados inseridos</span>`;
       }
 
       if (campoDeSenhaIgualArroba) {
-        retorno += `<p class="retorno-senha">Senha igual ao arroba: insira uma senha forte e diferente dos seus dados inseridos</p>`;
+        retorno += `<span class="retorno-senha">Senha igual ao arroba: insira uma senha forte e diferente dos seus dados inseridos</span>`;
       }
 
-      if (campoDeSenhaVazio) {
-        retorno = `<p class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</p>`;
-      }
+      // if (campoDeSenhaVazio) {
+      //   retorno = `<span class="retorno-senha">Senha em branco: insira uma senha que atenda aos critérios</span>`;
+      // }        VISUALIZAR isso é mais prejudicial/redundante do que útil
 
       cardErro.style.display = "block";
       mensagem_erro.innerHTML = retorno;
-
       finalizarAguardar();
-      // return false; NÃO SEI O QUE ESSA LINHA DEVERIA FAZER, ACHO QUE SERVE SOMENTE À FUNÇÃO PRINCIPAL
+
+      /*return false; NÃO SEI O QUE ESSA LINHA DEVERIA FAZER, ACHO QUE SERVE SOMENTE À FUNÇÃO PRINCIPAL*/
       setInterval(sumirMensagem, 5000);
 
       /* CASO TENHA PASSADO, NÃO QUER DIZER QUE SERVE, SIMPLESMENTE SIGNIFICA QUE NÃO É TOTALMENTE DESCONSIDERÁVEL */
     } else {
-
+      sumirMensagem();
 
       let vt_senha = [];
       let vt_confSenha = [];
@@ -371,7 +371,7 @@
       let tamanhoSenhaVar = senhaVar.length;
       let tamanhoConfirmacaoSenhaVar = confirmacaoSenhaVar.length;
 
-      let listaCaractEspeciais = ` ºª°§!@#$%^&*()-+=[]{};:"|,.<>/?~'`;
+      let listaCaractEspeciais = `º ª°§!@#$%^&*()-+=[]{};:"|,.<>/?~'`;
       let listaNumeros = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
       let possuiNumero = false;
@@ -379,10 +379,9 @@
       let camposConferem = vt_senha == vt_confSenha && tamanhoSenhaVar == tamanhoConfirmacaoSenhaVar;
       let incluiLetraMaius = (senhaVar.toLowerCase() != senhaVar); // ênfase neste campo pois é o que será enviado ao BD e porque diferenças serão tratadas pelo campo acima
       let incluiLetraMinus = (senhaVar.toUpperCase() != senhaVar);
-      let maisDe7Caract = tamanhoSenhaVar >= 8 /* && tamanhoConfirmacaoSenhaVar >= 8 */;
+      let maisDe7Caract = tamanhoSenhaVar >= 8;
 
 
-      // div_validSenha.style.display = "flex";
 
 
       // Passando caracteres do campo "senha" para um array
@@ -390,7 +389,7 @@
         vt_senha += senhaVar[i];
 
         // Verificando se há algum número
-        if (listaNumeros.includes(Number(vt_senha[i]))) {
+        if (listaNumeros.includes(Number(vt_senha[i])) && vt_senha[i] != ' ') {
           possuiNumero = true;
         }
 
@@ -419,7 +418,7 @@
         validado = true;
 
         caractEspecial.style.color = 'var(--índigo-terciário)';
-        
+
         numero.style.color = 'var(--índigo-terciário)';
 
         maiusc.style.color = 'var(--índigo-terciário)';
@@ -484,9 +483,6 @@
       }
 
     }
-
-
-    // div_validSenha.innerHTML = retorno;
 
 
     return validado; /*  será usado para permitir ou negar inserção de registro no banco de dados ao executar função "cadastrar()" */
