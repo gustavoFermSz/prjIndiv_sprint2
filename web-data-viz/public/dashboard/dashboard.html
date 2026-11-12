@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FicSiete - Dashboard</title>
 
-    
+
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="stylesheet" href="./../css/estilo.css" />
     <script src="../js/sessao.js"></script>
@@ -39,31 +39,41 @@
             </div>
 
             <div class="btn-nav-white">
+                <a href="#">
+                    <h3>Usuarios</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav-white">
                 <a href="./cards.html">
-                    <h3>Mural</h3>
+                    <h3>Cartas<span id="b_carta"></span></h3>
                 </a>
             </div>
 
             <div class="btn-nav">
-
-                <h3>Usuários</h3>
-
-            </div>
-
-            <div class="btn-nav-white">
                 <a href="./mural.html">
-                    <h3>Quizzes</h3>
+                    <h3>Mural<span id="b_posts"></span></h3>
                 </a>
             </div>
 
             <div class="btn-nav-white">
-                <a href="./#">
-                    <h3>Cartas<span id="b_usuario"></span></h3>
+                <a href="#">
+                    <h3>Quizzes<span id="b_quizes"></span></h3>
                 </a>
             </div>
 
-            <div class="btn-logout" onclick="limparSessao()">
-                <h3>Sair</h3>
+            <div class="info_conta_e_sair">
+
+                <div class="infos_sidebar">
+                    <img src="../assets/icon/usuario_comum.png" alt="Messi">
+                    <h5>Lucas Theodósio</h5>
+                </div>
+
+                <div class="btn-logout" onclick="limparSessao()">
+                    <img src="../assets/icon/seta_logout.png" alt="Messi">
+
+                </div>
+
             </div>
 
         </div>
@@ -85,6 +95,7 @@
 
 </html>
 
+<!--
 <script>
     b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
 
@@ -312,3 +323,5 @@
 
     }
 </script>
+
+-->

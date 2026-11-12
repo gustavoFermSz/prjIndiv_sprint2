@@ -2,13 +2,13 @@
 <html lang="pt-br">
 
 <head>
-    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/icon/wordmark.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaTech | Página Inicial</title>
+    <title>FicSiete - Edição de postagem</title>
 
-    
+
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="stylesheet" href="./../css/estilo.css" />
     <script src="../js/sessao.js"></script>
@@ -19,7 +19,7 @@
         rel="stylesheet">
 </head>
 
-<body onload="validarSessao(), listarInfosDeUm()" style="background-color: #161618;">
+<body> <!-- onload="validarSessao(), listarInfosDeUm()" style="background-color: #161618;"-->
     <!-- <body onload="validarSessao()"> -->
 
     <div class="janela">
@@ -27,77 +27,95 @@
 
         <div class="header-left">
 
-            <h1>AquaTech</h1>
+            <h1>FicSiete</h1>
 
             <div class="hello">
                 <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
             </div>
 
             <div class="btn-nav-white">
-                <a href="cards.html">
-                    <h3>Aquários e Terrários</h3>
-                </a>
-            </div>
-
-            <div class="btn-nav-white">
                 <a href="./dashboard.html">
-                    <h3>Gráficos</h3>
+                    <h3>Usuarios</h3>
                 </a>
             </div>
 
             <div class="btn-nav-white">
-                <a href="./mural.html">
-                    <h3>Mural de Avisos</h3>
+                <a href="./cards.html">
+                <h3>Cartas<span id="b_carta"></span></h3>
                 </a>
             </div>
 
-            <div class="btn-logout" onclick="limparSessao()">
-                <h3>Sair</h3>
+            <div class="btn-nav">
+                <a href="./mural.html">
+                    <h3>Mural<span id="b_carta"></span></h3>
+                </a>
             </div>
 
-        </div>
+            <div class="btn-nav-white">
+                <a href="./edicao-aviso.html">
+                    <h3>Quizzes<span id="b_quizes"></span></h3>
+                </a>
+            </div>
 
-        <div class="dash-right">
+            <div class="info_conta_e_sair">
 
-            <div class="avisos">
-                <div class="container">
-                    <h1>Editar um aviso</h1>
-                    <div class="div-form">
-                        <label>
-                            ID:
-                            <br>
-                            <input id="input_id" maxlength="100" type="text" style="color: rgb(196, 196, 196)" disabled>
-                        </label>
-                        <label>
-                            Autor:
-                            <br>
-                            <input id="input_nome" maxlength="100" type="text" style="color: rgb(196, 196, 196)"
-                                disabled>
-                        </label>
-                        <label>
-                            Título:
-                            <br>
-                            <input id="input_titulo" maxlength="100" type="text" style="color: rgb(196, 196, 196)"
-                                disabled>
-                        </label>
-                        <br>
-                        <label>
-                            Descrição (máximo de 250 caracteres):
-                            <br>
-                            <textarea id="textarea_descricao" maxlength="250" rows="5"></textarea>
-                        </label>
-                        <br>
-                        <button onclick="editar()">Editar</button>
-                    </div>
+                <div class="infos_sidebar">
+                    <img src="../assets/icon/usuario_comum.png" alt="Messi">
+                    <h5>Lucas Theodósio</h5>
+                </div>
+
+                <div class="btn-logout" onclick="limparSessao()">
+                    <img src="../assets/icon/seta_logout.png" alt="Messi">
 
                 </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="dash-right">
+
+        <div class="avisos">
+            <div class="container">
+                <h1>Editar um aviso</h1>
+                <div class="div-form">
+                    <label>
+                        ID:
+                        <br>
+                        <input id="input_id" maxlength="100" type="text" style="color: rgb(196, 196, 196)" disabled>
+                    </label>
+                    <label>
+                        Autor:
+                        <br>
+                        <input id="input_nome" maxlength="100" type="text" style="color: rgb(196, 196, 196)" disabled>
+                    </label>
+                    <label>
+                        Título:
+                        <br>
+                        <input id="input_titulo" maxlength="100" type="text" style="color: rgb(196, 196, 196)" disabled>
+                    </label>
+                    <br>
+                    <label>
+                        Descrição (máximo de 250 caracteres):
+                        <br>
+                        <textarea id="textarea_descricao" maxlength="250" rows="5"></textarea>
+                    </label>
+                    <br>
+                    <button onclick="editar()">Editar</button>
+                </div>
+
             </div>
         </div>
+    </div>
     </div>
 </body>
 
 </html>
 
+<!--
 <script>
     function listarInfosDeUm() {
         console.log("Criar função de trazer informações de post escolhido");
@@ -126,5 +144,6 @@
             console.log(`#ERRO: ${resposta}`);
         });
     }
+-->
 
 </script>

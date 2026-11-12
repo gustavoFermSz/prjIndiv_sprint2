@@ -2,11 +2,11 @@
 <html lang="pt-br">
 
 <head>
-    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/icon/wordmark.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaTech | Tempo Real</title>
+    <title>FicSiete - Tempo Real</title>
 
 
     <link rel="stylesheet" href="./../css/dashboards.css">
@@ -20,37 +20,56 @@
         rel="stylesheet">
 </head>
 
-<body onload="validarSessao(), exibirAquarios(),  atualizacaoPeriodica()">
+<body> <!-- onload="validarSessao(), exibirAquarios(),  atualizacaoPeriodica()" -->
 
     <div class="janela">
 
         <div class="header-left dash-header">
 
-            <h1>AquaTech</h1>
+            <h1>FicSiete</h1>
 
             <div class="hello">
                 <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
             </div>
 
-            <div class="btn-nav">
-                <h3>Aquários e Terrários</h3>
-            </div>
-
             <div class="btn-nav-white">
                 <a href="./dashboard.html">
-                    <h3>Gráficos</h3>
+                <h3>Usuarios</h3>
                 </a>
             </div>
 
             <div class="btn-nav-white">
-                <a href="./mural.html">
-                    <h3>Mural de Avisos</h3>
+                <a href="#">
+                    <h3>Cartas<span id="b_carta"></span></h3>
                 </a>
             </div>
 
-            <div class="btn-logout" onclick="limparSessao()">
-                <h3>Sair</h3>
+            <div class="btn-nav">
+                <a href="./mural.html">
+                    <h3>Mural<span id="b_posts"></span></h3>
+                </a>
             </div>
+
+            <div class="btn-nav-white">
+                <a href="./edicao-aviso.html">
+                    <h3>Quizzes<span id="b_quizes"></span></h3>
+                </a>
+            </div>
+
+            <div class="info_conta_e_sair">
+
+                <div class="infos_sidebar">
+                    <img src="../assets/icon/usuario_comum.png" alt="Messi">
+                    <h5>Lucas Theodósio</h5>
+                </div>
+
+                <div class="btn-logout" onclick="limparSessao()">
+                    <img src="../assets/icon/seta_logout.png" alt="Messi">
+
+                </div>
+
+            </div>
+
 
         </div>
 
@@ -95,6 +114,8 @@
 
 </body>
 
+<!--
+
 <script>
 
     function exibirAquarios() {
@@ -116,5 +137,7 @@
     }
 
 </script>
+
+-->
 
 </html>
