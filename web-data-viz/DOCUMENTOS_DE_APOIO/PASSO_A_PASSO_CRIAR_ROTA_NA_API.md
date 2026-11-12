@@ -75,7 +75,7 @@ router.get("/listar", function (req, res) {
     carroController.listar(req, res);
 });
 ```
-
+_________________________________________<!-- para que assim? -->
 **Sempre devemos deixar visível (exportar) para outro que assim outro arquivo consiga importar todas as nossas configurações desse arquivo:**
 
 ```jsx

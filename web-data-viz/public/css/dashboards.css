@@ -1,11 +1,56 @@
 /* pagina mural */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
+
+:root {
+  --tamanho-header: 40px;
+  --tamanho-header-mobile: 40px;
+
+  --tamanho-fonte-serifada-principal: 52px;
+  --tamanho-fonte-principal: 44px;
+  --tamanho-fonte-titulo: 32px;
+  --tamanho-fonte-subtitulo: 24px;
+  --tamanho-fonte-texto-grande: 16px;
+  --tamanho-fonte-texto-pequeno: 12px;
+  --tamanho-fonte-texto-minúsculo: 8px;
+
+  --fonte-titulo: 'Playfair';
+  --fonte-texto: 'Inter';
+
+
+
+
+  --branco-principal: #EAF1FF;
+  --branco-secundário: #F3F0F5;
+  --branco-terciário: whitesmoke;
+
+  --preto-principal: #1A1A1E;
+  --preto-secundário: #000000;
+  --preto-terciário: #303034;
+
+  --vermelho-principal: #C23B22;
+  --vermelho-secundário: #8E1400;
+  --vermelho-terciário: #F55F43;
+
+  --palha-principal: #D4A373;
+  --palha-secundário: #B5885A;
+  --palha-terciário: #F0BD8B;
+
+
+  --índigo-principal: #64748B;
+  --índigo-secundário: #213145;
+  --índigo-terciário: #D3E4FE;
+
+}
+
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--fonte-texto);
 }
 
 .label-captura {
@@ -16,7 +61,7 @@ body {
 .dash-right .avisos {
   width: 100%;
   color: rgb(216, 216, 216);
-  font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .dash-right .avisos .container {
@@ -347,8 +392,8 @@ canvas {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  border-right: 3px solid #32b9cd;
-  background-color: #212124;
+  border-right: 3px solid var(--vermelho-principal);
+  background-color: var(--preto-terciário);
 }
 
 .dash-right {
@@ -386,7 +431,7 @@ canvas {
 .btn-nav {
   width: 40%;
   color: white;
-  background-color: #e6005a;
+  background-color: var(--vermelho-principal);
   border-radius: 5px;
   text-align: center;
   padding: 2% 5%;
@@ -394,15 +439,15 @@ canvas {
 
 .btn-nav-white {
   width: 40%;
-  background-color: white;
-  border: 3px solid #e6005a;
+  background-color: var(--branco-terciário);
+  border: 3px solid var(--vermelho-principal);
   border-radius: 5px;
   text-align: center;
   padding: 2% 5%;
 }
 
 .btn-nav-white h3 {
-  color: #e6005a;
+  color: var(--vermelho-principal);
   padding: 0;
   margin: 0;
 }
@@ -417,8 +462,8 @@ canvas {
   margin: 0;
   padding: 0;
   width: 20%;
-  background-color: #32b9cd;
-  color: white;
+  background-color: var(--branco-principal);
+  color: color(--preto-secundário);
   border-radius: 10px;
   text-align: center;
   padding: 10px 15px;

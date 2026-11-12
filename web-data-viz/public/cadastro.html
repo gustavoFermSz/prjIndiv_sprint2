@@ -215,7 +215,7 @@
 <script>
 
 
-  function cadastrar() {
+  async function cadastrar() {
     // aguardar();
 
     //Recupere o valor da nova input pelo nome do id
@@ -226,8 +226,16 @@
     var arrobaVar = arroba_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
+
+    let tiposImagemPermitidos = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
+    let limiteTamanhoImagem = 4 * 1024 * 1024; // equivalente a 4 megabytes - o cálculo foi feito pela IA, devo pesquisar mais a fundo dps, pra dar orgulho p/ prof. Matheus
+    let dadoCampoAvatar = avatar_input.files && avatar_input.files.length > 0 ? // operador ternário atua assim: condição ? ação em caso verdadeiro : ação nos casos negativos
+      avatar_input.files[0] : null;
+    let arquivo; // sugestão das IAs, a esse ponto já sofreu umas 6 mudanças de função e/ou dados atribuídos. Preciso pedir mais direcionamento para as coisas em que não tenho base
+
     let validado;
 
+    // pegando o resultado da função de validação de senha para prosseguir ou não com o cadastro
     if (validarSenha() == true) {
       validado = true;
 
@@ -236,28 +244,104 @@
     }
 
 
+    /* Verificando se há algum campo obrigatório em branco*/
+    let campoEmBranco = nomeVar == "" || emailVar == "" || arrobaVar == "" || senhaVar == "" || confirmacaoSenhaVar == ""
 
-    /* Verificando se há algum campo em branco*/
     if (
-      nomeVar == "" || emailVar == "" || arrobaVar == "" || senhaVar == "" || confirmacaoSenhaVar == ""
+      campoEmBranco || validado == false
     ) {
       cardErro.style.display = "block";
-      mensagem_erro.innerHTML =
-        "Um ou mais campos em branco: insira suas informações para continuar";
+
+      // Enviando mensagem específica para o erro
+      if (!validado) {
+        mensagem_erro.innerHTML =
+          "Senha inválida: insira uma senha que cumpra todos os requisitos para continuar";
+
+      } else {
+        mensagem_erro.innerHTML =
+          "Um ou mais campos obrigatórios em branco: digite suas informações para continuar";
+      }
 
       finalizarAguardar();
       return false;
 
     } else {
       setInterval(sumirMensagem, 5000);
-
-    }       /*MANTIDO APENAS PARA DISSECAR NUM FUTURO BREVE */
-
+    }       /*CÓDIGO ACIMA MANTIDO APENAS PARA DISSECAR NUM FUTURO BREVE */
 
 
-    if (avatarVar == undefined || avatarVar == '') {
-      // avatar = URL('./ass');
+
+
+    // Validações específicas para o campo AVATAR, a foto de perfil do usuário
+
+
+    if (dadoCampoAvatar == null || avatarVar == '' || avatarVar.files.length == 0) {
+
+      // Adicionar imagem predefinida ao perfil de quem não escolheu nenhum arquivo
+      try {
+        arquivo = './assets/icon/usuario_comum.png';
+
+        let resp = await fetch(arquivo);
+        let blob;
+
+        if (!resp.ok) {
+          // definir depois o que fazer
+        } else {
+          blob = await resp.blob();
+
+          arquivo = await new Promise((resolve, reject) => {
+            let ler = new FileReader();
+            ler.onload = () => resolve(ler.result);
+            ler.onerror = (error) => reject(error);
+            ler.readAsDataURL(blob);
+          });
+
+        }
+
+      } catch (err) {
+        console.error('Erro ao buscar imagem padrão:', err);
+        arquivo = ''; // fallback; o servidor pode atribuir padrão se preferir <--- se eu realmente preciso disso para usar imagens, vale a pena questionar se eu conseguirei usar tanto imagens neste projeto quanto planejei.
+
+      }
+
+    } else if (!tiposImagemPermitidos.includes(dadoCampoAvatar.type)) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "Avatar negado: tipo de arquivo inválido. São aceitos arquivos .png, .jpeg, .jpg, .gif e .webp";
+
+      return false;
+      // MENSAGEM de erro para tipo de arquivo inválido no campo Avatar
+
+
+    } else if (dadoCampoAvatar.size > limiteTamanhoImagem) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "Avatar negado: tamanho de arquivo inválido. Apenas imagens de até 4MB são aceitas";
+
+      return false;
+      // MENSAGEM de erro para arquivo demasiado grandioso no campo Avatar
+
+
+    } else {
+      setInterval(sumirMensagem, 5000);
+
+
+      arquivo = await new Promise((resolve, reject) => { // promise é um objeto que promete um retornar resultado no futuro, na forma de uma das suas duas funções internas, podendo ser resolve (função mais adentro funcionou) ou reject (houve erro em alguma parte do processo).
+
+        let ler = new FileReader(); // traduzindo a definição de fileReader, é uma interface que permite a leitura assíncrona de arquivos os "data buffers" armazenados no computador do usuário final - usa-se Blob ou File para especificação do dado ou arquivo a ser lido.
+
+        ler.onload = () => resolve(ler.result); // resolve recebe o resultado (em formato dataURL "data:image/..;base64,...") quando dá certo
+        ler.onerror = (error) => reject(error); // reject recebe os erros de execução
+        ler.readAsDataURL(dadoCampoAvatar); // a conversão em si
+
+      });
     }
+
+
+
+
+
+
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -269,7 +353,7 @@
       body: JSON.stringify({
         // crie um atributo que recebe o valor recuperado aqui
         // Agora vá para o arquivo routes/usuario.js
-        avatarServer: avatarVar,
+        avatarServer: arquivo,
         nomeServer: nomeVar,
         emailServer: emailVar,
         arrobaServer: arrobaVar,
@@ -324,7 +408,6 @@
     let retorno = '';
     let validado = false;
 
-    // let campoDeSenhaVazio = senhaVar == '' || confirmacaoSenhaVar == '';
     let campoDeSenhaIgualNome = senhaVar == nomeVar || confirmacaoSenhaVar == nomeVar;
     let campoDeSenhaIgualEmail = senhaVar == emailVar || confirmacaoSenhaVar == emailVar;
     let campoDeSenhaIgualArroba = senhaVar == arrobaVar || confirmacaoSenhaVar == arrobaVar;
@@ -358,12 +441,10 @@
       mensagem_erro.innerHTML = retorno;
       finalizarAguardar();
 
-      /*return false; NÃO SEI O QUE ESSA LINHA DEVERIA FAZER, ACHO QUE SERVE SOMENTE À FUNÇÃO PRINCIPAL*/
-      setInterval(sumirMensagem, 5000);
 
       /* CASO TENHA PASSADO, NÃO QUER DIZER QUE SERVE, SIMPLESMENTE SIGNIFICA QUE NÃO É TOTALMENTE DESCONSIDERÁVEL */
     } else {
-      sumirMensagem();
+      setInterval(sumirMensagem, 10000);
 
       let vt_senha = [];
       let vt_confSenha = [];
@@ -376,7 +457,7 @@
 
       let possuiNumero = false;
       let possuiCaractEspecial = false;
-      let camposConferem = vt_senha == vt_confSenha && tamanhoSenhaVar == tamanhoConfirmacaoSenhaVar;
+      let camposConferem = false; // Comparação direta entre dois vetores, como (vt_senha == vt_confSenha), sempre retornam FALSE, pois a comparação não é feita com base nos itens!
       let incluiLetraMaius = (senhaVar.toLowerCase() != senhaVar); // ênfase neste campo pois é o que será enviado ao BD e porque diferenças serão tratadas pelo campo acima
       let incluiLetraMinus = (senhaVar.toUpperCase() != senhaVar);
       let maisDe7Caract = tamanhoSenhaVar >= 8;
@@ -399,12 +480,16 @@
         }
 
       }
+
       // Passando caracteres do campo "confirmação da senha" para um array
       for (let i = 0; i < tamanhoConfirmacaoSenhaVar; i++) {
         vt_confSenha += confirmacaoSenhaVar[i];
 
-        if (vt_confSenha[i] !== vt_senha[i]) {
+        if (vt_confSenha[i] == vt_senha[i] && tamanhoSenhaVar == tamanhoConfirmacaoSenhaVar) {
+          camposConferem = true;
+        } else {
           camposConferem = false;
+
         }
 
       }
@@ -511,6 +596,7 @@
 
   function sumirMensagem() {
     cardErro.style.display = "none";
+
   }
 
 </script>
