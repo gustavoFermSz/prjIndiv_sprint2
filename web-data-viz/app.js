@@ -22,8 +22,8 @@ var medidasRouter = require("./src/routes/medidas");
 var aquariosRouter = require("./src/routes/aquarios");
 var empresasRouter = require("./src/routes/empresas");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json( { limit: '10mb' } )); // estudar esses 2 quando possível
+app.use(express.urlencoded({ extended: false, limit: '10mb' })); // limite expandido para 10mb para comportar envio de imagens
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());

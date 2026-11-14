@@ -16,18 +16,21 @@ function cadastrar(avatarBuffer, avatarMime, nome, email, arroba, senha) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `
-        INSERT INTO usuario (imgAvatar, mimeAvatar, nome, email, arroba, senha, tipoConta) VALUES (?, ?, ?, ?, ?, ?)';
+        INSERT INTO usuario (imgAvatar, mimeAvatar, nome, email, arroba, senha, tipoConta) VALUES (?, ?, ?, ?, ?, ?, ?);
         `;
         
     var parametrosSql = [avatarBuffer, avatarMime, nome, email, arroba,  senha, 2];
 
-    connection.query(instrucaoSql, parametrosSql, (err, result) => {
-        // não sei o que deve ser colocado
-    });
+    // connection.query(instrucaoSql, parametrosSql, (err, result) => {
+    // não sei o que deve ser colocado
+    // });      Redundante com database.executar
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.efetuar(instrucaoSql, parametrosSql);      
 }
+
+
+
 
 function verificarEmail(email) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function verEmail(): ", email)
@@ -63,4 +66,5 @@ module.exports = {
     cadastrar,
     verificarArroba,
     verificarEmail
+    // , dadosUsuario
 };

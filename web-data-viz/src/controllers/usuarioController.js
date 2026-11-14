@@ -1,6 +1,10 @@
 var usuarioModel = require("../models/usuarioModel");
 var aquarioModel = require("../models/aquarioModel");
 
+let fs = require('fs').promises;
+let path = require('path'); // entender melhor para que serve, depois
+
+
 function autenticar(req, res) {
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
@@ -31,7 +35,7 @@ function autenticar(req, res) {
                                         aquarios: resultadoAquarios
                                     });
                                 } else {
-                                    return res.status(204).json({ aquarios: [] });
+                                    return res.status(201).json({ aquarios: [] });      // Era 204 o código, para "sem corpo", "sem conteúdo", mas não cabe à minha regra de negócio
                                 }
                             })
                     } else if (resultadoAutenticar.length == 0) {
@@ -63,11 +67,6 @@ async function cadastrar(req, res) {
 
 
     // Validações dos valores (parte específica do Controller)
-
-
-
-
-    // Validações dos valores (parte equivalente ao cliente)
     // if (emailsNoBanco.includes(email)) {
 
     // }
@@ -78,72 +77,70 @@ async function cadastrar(req, res) {
 
 
 
+    // Validações dos valores (parte equivalente ao cliente)
+
+
+
+
+
 
     // Finalização do tratamento do dado da imagem
-    let dadoAvatar = avatar.files && !avatar.startsWith('data:') ?
-        avatar.files[0] : path.join(__dirname, '..', 'public', 'assets', 'icon', 'usuario_comum.png'); // './assets/icon/usuario_comum.png';
-    let arquivoAvatar;
+    let dadoAvatar = avatar.startsWith('data:') ?
+        avatar : null; // './assets/icon/usuario_comum.png';
+    let arquivoAvatar = null;
     let tiposImagemPermitidos = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
     let limiteTamanhoImagem = 4 * 1024 * 1024; // equivale a 4MB
 
     let avatarMime = null; // = tipo da imagem de Avatar (.jpg, .png etc)
     let avatarBuffer = null;
-
-    // avatar == './assets/icon/usuario_comum.png' || 
-    if (avatar == undefined || dadoAvatar == null || avatar == '' || avatar.files.length == 0) {
+    let buffer = null;
 
 
-        // usar novamente do fileReader e converter a imagem para base64
-        arquivoAvatar = await new Promise((resolve, reject) => { // promise é um objeto que promete um retornar resultado no futuro, na forma de uma das suas duas funções internas, podendo ser resolve (função mais adentro funcionou) ou reject (houve erro em alguma parte do processo).
+    if (avatar == undefined || dadoAvatar == null || avatar == '' || avatar == '/assets/icon/usuario_comum.png') {
+        // quando o usuário não escolher nenhum arquivo
+        let avatarPadrao = path.join(__dirname, '..', '..', 'public', 'assets', 'icon', 'usuario_comum.png');
 
-            let ler = new FileReader(); // traduzindo a definição de fileReader, é uma interface que permite a leitura assíncrona de arquivos os "data buffers" armazenados no computador do usuário final - usa-se Blob ou File para especificação do dado ou arquivo a ser lido.
+        buffer = await fs.readFile(avatarPadrao);
+        avatarBuffer = buffer;
+        avatarMime = 'image/png'; // é literalmente só o tipo de imagem da imagem padrão escolhida por mim.
 
-            ler.onload = () => resolve(ler.result); // resolve recebe o resultado (em formato dataURL "data:image/..;base64,...") quando dá certo
-            ler.onerror = (error) => reject(error); // reject recebe os erros de execução
-            ler.readAsDataURL(dadoAvatar); // a conversão em si
-
-        });
-
+        arquivoAvatar = avatarMime + avatarBuffer;
 
     } else {
 
-        if (dadoAvatar == null || avatar == '' || avatar == undefined) {
+        if (avatar == '' || avatar == undefined) {
             // Verificar se tentativas de inserir imagem predefinida p/ quem não escolheu nenhuma foram falhas
-            return res.status(400).send("Avatar negado: tipo de arquivo inválido. São aceitos arquivos .png, .jpeg, .jpg, .gif e .webp");
+            return res.status(400).send("Avatar negado: erro desconhecido na submissão de imagem, tente novamente mais tarde.");
 
 
-        } else if (!tiposImagemPermitidos.includes(dadoAvatar.type)) {
-            return res.status(400).send("Avatar negado: tipo de arquivo inválido. São aceitos arquivos .png, .jpeg, .jpg, .gif e .webp");
-
-        } else if (dadoAvatar.size > limiteTamanhoImagem) {
-            return res.status(400).send("Avatar negado: tamanho de arquivo inválido. Apenas imagens de até 4MB são aceitas");
-
+            // LEMBRAR QUE O DADO ENVIADO A ESTE CONTROLLER JÁ VEM COMO STRING DATAURL, NÃO MAIS COMO ARQUIVO DE IMAGEM
         } else {
-            // não vejo necessidade de fazer algo aqui, estando tudo certo
+            // não vejo necessidade de fazer algo aqui, estando tudo certo. deixo as validações de tipo e tamanho de imagem para o IF abaixo
             arquivoAvatar = avatar;
 
         }
-
-
     }
 
 
     // Coletar mime e afins da imagem, continuar de onde parou.
     if (arquivoAvatar && arquivoAvatar.startsWith('data:')) {
-        let matches = arquivoAvatar.match(/^data:(.+);base64,(.+)$/);
+
+        let matches = arquivoAvatar.match(/^data:(.+);base64,(.+)$/); // Estudar essa notação horrorosa: Regex
 
         if (matches) {
             avatarMime = matches[1]; // o tipo de imagem
             let dadosEmBase64 = matches[2]; // os dados que compõem a imagem em si, na base 64
 
 
-            let buffer = Buffer.from(dadosEmBase64, 'base64');
+            buffer = Buffer.from(dadosEmBase64, 'base64');
+
             if (!avatarMime.startsWith('image/') || !tiposImagemPermitidos.includes(avatarMime)) {
                 return res.status(400).send('Arquivo não é uma imagem ou não é de tipo permitido (png, jpg, jpeg, gif ou webp).');
             }
             if (buffer.length > limiteTamanhoImagem) {
-                return res.status(400).send('Arquivo muito grande. Máx 2 MB.');
+                return res.status(400).send('Tamanho de arquivo inválido. Apenas imagens de até 4MB são aceitas');
             }
+
             avatarBuffer = buffer;
 
         } else {
@@ -168,11 +165,8 @@ async function cadastrar(req, res) {
     if (nome == undefined) {
         return res.status(400).send("Seu nome está undefined!");
 
-    } else if (avatarBuffer == undefined) {
+    } else if (avatarBuffer == undefined || avatarMime == undefined) {
         return res.status(400).send("Seu arquivo de imagem avatar está undefined!");
-    } else if (avatarMime == undefined) {
-        return res.status(400).send("Seu tipo de arquivo de avatar está undefined!");
-
     } else if (email == undefined) {
         return res.status(400).send("Seu email está undefined!");
     } else if (arroba == undefined) {
@@ -186,7 +180,7 @@ async function cadastrar(req, res) {
         usuarioModel.cadastrar(avatarBuffer, avatarMime, nome, email, arroba, senha)
             .then(
                 function (resultado) {
-                    return res.json(resultado);
+                    return res.status(200).json(resultado);
                 }
             ).catch(
                 function (erro) {
@@ -202,12 +196,12 @@ async function cadastrar(req, res) {
 }
 
 
-// function avatar(req, res) {
+// function dadosUsuario(req, res) {
 
 // }
 
 module.exports = {
     autenticar,
     cadastrar
-    // , avatar
+    // , dadosUsuario
 }

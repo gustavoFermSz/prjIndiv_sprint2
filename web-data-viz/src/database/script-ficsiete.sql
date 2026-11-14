@@ -9,7 +9,7 @@ CREATE TABLE usuario (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) NOT NULL,
     imgAvatar MEDIUMBLOB NOT NULL,
-    mimeAvatar VARCHAR(100),
+    mimeAvatar VARCHAR(100) NOT NULL,
     arroba varchar(45) NOT NULL UNIQUE,
     email VARCHAR(45) NOT NULL UNIQUE,
     senha VARCHAR(60) NOT NULL,
@@ -47,3 +47,40 @@ CREATE TABLE medida (
 );
 
 SELECT * FROM usuario;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

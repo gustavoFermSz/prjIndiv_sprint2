@@ -274,12 +274,11 @@
 
     // Validações específicas para o campo AVATAR, a foto de perfil do usuário
 
-
-    if (dadoCampoAvatar == null || avatarVar == '' || avatarVar.files.length == 0) {
+    if (dadoCampoAvatar == null || avatarVar == '') {
 
       // Adicionar imagem predefinida ao perfil de quem não escolheu nenhum arquivo
       try {
-        arquivo = './assets/icon/usuario_comum.png';
+        arquivo = '/assets/icon/usuario_comum.png';
 
         let resp = await fetch(arquivo);
         let blob;
@@ -300,7 +299,8 @@
 
       } catch (err) {
         console.error('Erro ao buscar imagem padrão:', err);
-        arquivo = ''; // fallback; o servidor pode atribuir padrão se preferir <--- se eu realmente preciso disso para usar imagens, vale a pena questionar se eu conseguirei usar tanto imagens neste projeto quanto planejei.
+        return false; // no momento não tenho tempo para me preocupar com isso, então será retornado erro
+        //arquivo = '';  fallback; o servidor pode atribuir padrão se preferir <--- se eu realmente preciso disso para usar imagens, vale a pena questionar se eu conseguirei usar tanto imagens neste projeto quanto planejei.
 
       }
 
@@ -336,10 +336,6 @@
 
       });
     }
-
-
-
-
 
 
 
