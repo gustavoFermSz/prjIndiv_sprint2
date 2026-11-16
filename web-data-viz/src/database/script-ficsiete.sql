@@ -5,16 +5,19 @@ USE fantasia;
 SHOW TABLES;
 -- DROP TABLE usuario;
 
+DESC usuario;
+SHOW INDEX FROM usuario;
+
 CREATE TABLE usuario (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) NOT NULL,
     imgAvatar MEDIUMBLOB NOT NULL,
     mimeAvatar VARCHAR(100) NOT NULL,
-    arroba varchar(45) NOT NULL UNIQUE,
+    arroba varchar(60) NOT NULL UNIQUE,
     email VARCHAR(45) NOT NULL UNIQUE,
     senha VARCHAR(60) NOT NULL,
     tipoConta TINYINT DEFAULT 2 NOT NULL, -- sendo 1 para contas administrativas no sistema e 2 para contas padrão
-		CONSTRAINT ch_tipo_conta CHECK (tipoConta = 1 OR 2)
+		CONSTRAINT ch_tipo_conta CHECK (tipoConta IN (1, 2))
 );
 
 CREATE TABLE aviso (
@@ -45,6 +48,8 @@ CREATE TABLE medida (
 	fk_aquario INT,
 	FOREIGN KEY (fk_aquario) REFERENCES aquario(id)
 );
+
+USE fantasia;
 
 SELECT * FROM usuario;
 

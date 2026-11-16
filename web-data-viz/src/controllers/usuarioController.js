@@ -55,6 +55,8 @@ function autenticar(req, res) {
 
 }
 
+
+
 async function cadastrar(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
     var avatar = req.body.avatarServer;
@@ -63,22 +65,6 @@ async function cadastrar(req, res) {
     var arroba = req.body.arrobaServer;
     var senha = req.body.senhaServer;
     var confirmacaoSenha = req.body.confirmacaoSenhaServer;
-
-
-
-    // Validações dos valores (parte específica do Controller)
-    // if (emailsNoBanco.includes(email)) {
-
-    // }
-    // if (arrobasNoBanco.includes(arroba)) {
-
-    // }
-
-
-
-
-    // Validações dos valores (parte equivalente ao cliente)
-
 
 
 
@@ -159,10 +145,61 @@ async function cadastrar(req, res) {
 
 
 
+    // Validações dos valores (parte específica do Controller)
+
+    let senhasNaoBatem = false
+    if (confirmacaoSenha != senha) {
+        senhasNaoBatem = true;
+        return res.status(400).send('A senha inserida deve ser igual ao constante no campo de confirmação de senha. ');
+    }
 
 
-    // Validações mequetrefe que serão provalvelmente substituídas em breve
-    if (nome == undefined) {
+    let tamanhoStringInvalido = false;
+    if (nome.length > 45 || email.length > 60 || arroba.length > 60 || senha.length > 60) {
+        tamanhoStringInvalido = true;
+
+        if (nome.length > 45) {
+            return res.status(400).send('O campo nome aceita até 45 caracteres. ');
+        }
+
+        if (email.length > 60) {
+            return res.status(400).send('O campo email aceita até 60 caracteres. ');
+        }
+
+        if (arroba.length > 60) {
+            return res.status(400).send('O campo arroba aceita até 60 caracteres. ');
+        }
+
+        if (senha.length > 60) {
+            return res.status(400).send('O campo senha aceita até 60 caracteres. ');
+        }
+
+    }
+
+
+    let emailJaExiste = await usuarioModel.verificarEmail(email);
+    let arrobaJaExiste = await usuarioModel.verificarArroba(arroba);
+
+
+
+    if (emailJaExiste && emailJaExiste.length > 0 || arrobaJaExiste && arrobaJaExiste.length > 0) {
+
+        if (emailJaExiste && emailJaExiste.length > 0) {
+            return res.status(409).send("Este email já está cadastrado em nosso sistema. ");
+
+        }
+        if (arrobaJaExiste && arrobaJaExiste.length > 0) {
+            return res.status(409).send("Este arroba já está em uso dentro de nosso sistema"); // cód. de erro 409 indica conflito de dados
+
+        }
+
+    } else if (tamanhoStringInvalido) {
+        return res.status(400).send("Campo de texto muito grande. Limite de caracteres: 45 para nome e 60 para email, arroba e senha.");
+
+    } else if (senhasNaoBatem) {
+        return res.status(400).send("Campos senha e confirmação de senha não são iguais.");
+
+    } else if (nome == undefined) {
         return res.status(400).send("Seu nome está undefined!");
 
     } else if (avatarBuffer == undefined || avatarMime == undefined) {

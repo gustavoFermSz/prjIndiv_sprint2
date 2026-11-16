@@ -357,7 +357,7 @@
         confirmacaoSenhaServer: confirmacaoSenhaVar
       }),
 
-    }) // FIM FETCH
+    }) // FIM ENVIO DE DADOS DO FETCH
       .then(function (resposta) {
         console.log("resposta: ", resposta);
 
@@ -376,8 +376,14 @@
           finalizarAguardar();
 
         } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
+          
+          resposta.text().then(texto => {
+            
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML = texto;
+            finalizarAguardar();
 
+          });
         }
 
       })
