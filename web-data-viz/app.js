@@ -17,10 +17,14 @@ var app = express();
 
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
-var avisosRouter = require("./src/routes/avisos");
-var medidasRouter = require("./src/routes/medidas");
-var aquariosRouter = require("./src/routes/aquarios");
-var empresasRouter = require("./src/routes/empresas");
+// var avisosRouter = require("./src/routes/avisos");
+// var medidasRouter = require("./src/routes/medidas");
+// var aquariosRouter = require("./src/routes/aquarios");
+// var empresasRouter = require("./src/routes/empresas");
+var publicacoesRouter = require("./src/routes/publicacoes");
+var cartasRouter = require("./src/routes/cartas");
+var quizzesRouter = require("./src/routes/quizzes");
+var tentativasRouter = require("./src/routes/tentativas");
 
 app.use(express.json( { limit: '10mb' } )); // estudar esses 2 quando possível
 app.use(express.urlencoded({ extended: false, limit: '10mb' })); // limite expandido para 10mb para comportar envio de imagens
@@ -30,10 +34,15 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
-app.use("/avisos", avisosRouter);
-app.use("/medidas", medidasRouter);
-app.use("/aquarios", aquariosRouter);
-app.use("/empresas", empresasRouter);
+// app.use("/avisos", avisosRouter);
+// descontinuadas: medidas, aquarios, empresas (substituídas por funcionalidades do FicSiete)
+// app.use("/medidas", medidasRouter);
+// app.use("/aquarios", aquariosRouter);
+// app.use("/empresas", empresasRouter);
+app.use("/publicacoes", publicacoesRouter);
+app.use("/cartas", cartasRouter);
+app.use("/quizzes", quizzesRouter);
+app.use('/tentativas', tentativasRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`

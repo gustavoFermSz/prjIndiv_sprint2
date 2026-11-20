@@ -8,7 +8,9 @@
 
     <title>FicSiete - Login</title>
 
-    <script src="./js/sessao.js"></script>
+  <script src="./js/sessao.js"></script>
+  <script>window.NAV_ACTIVE = 'home';</script>
+  <script src="./js/navbar.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/icon/wordmark.png">
@@ -23,23 +25,7 @@
         <div class="container">
             <h1 class="titulo">FicSiete</h1>
             <ul class="navbar">
-                <li>
-                    <a href="index.html">Home</a>
-                </li>
-                <li>
-                    <a href="#">Quizes</a>
-                </li>
-                <li>|</li>
-                <li>
-                    <a href="#">Cartas</a>
-                </li>
-                <li class="agora">
-                    <a href="#">Login</a>
-                </li>
-                <li>
-                    <a href="cadastro.html">Cadastro</a>
-                    <!-- Ficará a imagem do avatar quando for usuário logado -->
-                </li>
+                <!-- navbar will be populated by js/navbar.js -->
             </ul>
         </div>
     </div>
@@ -220,10 +206,18 @@
                     sessionStorage.EMAIL_USUARIO = json.email;
                     sessionStorage.NOME_USUARIO = json.nome;
                     sessionStorage.ID_USUARIO = json.id;
-                    sessionStorage.AQUARIOS = JSON.stringify(json.aquarios)
+                    sessionStorage.AQUARIOS = JSON.stringify(json.aquarios);
+
+                    // store avatar, arroba and account type when returned by the API
+                    if (json.imgAvatar) sessionStorage.AVATAR_USUARIO = json.imgAvatar;
+                    if (json.arroba) sessionStorage.ARROBA_USUARIO = json.arroba;
+                    if (json.tipoConta !== undefined) {
+                        sessionStorage.TIPO_CONTA = json.tipoConta;
+                        sessionStorage.TIPO_USUARIO = json.tipoConta; // legacy key
+                    }
 
                     setTimeout(function () {
-                        window.location = "./dashboard/cards.html";
+                        window.location = "./index.html";
                     }, 1000); // apenas para exibir o loading
 
                 });

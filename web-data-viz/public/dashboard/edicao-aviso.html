@@ -19,7 +19,7 @@
         rel="stylesheet">
 </head>
 
-<body> <!-- onload="validarSessao(), listarInfosDeUm()" style="background-color: #161618;"-->
+<body onload="validarSessao()"> <!-- previously: validarSessao(), listarInfosDeUm() -->
     <!-- <body onload="validarSessao()"> -->
 
     <div class="janela">
@@ -52,7 +52,7 @@
             </div>
 
             <div class="btn-nav-white">
-                <a href="./edicao-aviso.html">
+                <a href="./edicao-aviso.html" class="agora">
                     <h3>Quizzes<span id="b_quizes"></span></h3>
                 </a>
             </div>
@@ -122,7 +122,7 @@
     }
 
     function editar() {
-        fetch(`/avisos/editar/${sessionStorage.getItem("ID_POSTAGEM_EDITANDO")}`, {
+        fetch(`/publicacoes/editar/${sessionStorage.getItem("ID_POSTAGEM_EDITANDO")}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"

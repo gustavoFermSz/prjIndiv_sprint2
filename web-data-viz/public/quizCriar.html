@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FicSiete - Criar Quiz</title>
+  <script src="./js/sessao.js"></script>
+  <script>window.NAV_ACTIVE = 'quizzes';</script>
+  <script src="./js/navbar.js"></script>
+  <link rel="stylesheet" href="./css/estilo.css" />
+  <link rel="stylesheet" href="./css/ficsite-conteudo.css" />
+</head>
+<body>
+  <div class="header"><div class="container"><h1 class="titulo">FicSiete</h1></div></div>
+  <div class="container main-conteudo">
+    <h2>Forjar Novo Quiz</h2>
+    <div class="card card-full">
+      <div class="campo"><input id="titulo" placeholder="Título do Quiz"/></div>
+      <div class="campo"><input id="sinopse" placeholder="Sinopse"/></div>
+      <div class="campo"><input id="imagemTema" type="file"/></div>
+      <div id="questoes"></div>
+      <div class="actions"><button id="btnAddQuest" class="botao">Adicionar Questão</button><button id="btnPublicar" class="botao">Publicar Quiz</button></div>
+    </div>
+  </div>
+
+  <script>
+    const questoesContainer = document.getElementById('questoes');
+    document.getElementById('btnAddQuest').addEventListener('click', ()=>{
+      const idx = questoesContainer.children.length + 1;
+      const wrapper = document.createElement('div'); wrapper.className='card card-mini';
+      wrapper.innerHTML = `<h4>Questão ${idx}</h4><div class='campo'><input class='pergunta' placeholder='Pergunta'/></div><div class='campo'><input type='file' class='imgQuest'/></div><div class='alternativas'></div><div><button class='addAlt botao'>+ Alternativa</button></div>`;
+      questoesContainer.appendChild(wrapper);
+      const addAltBtn = wrapper.querySelector('.addAlt');
+      addAltBtn.addEventListener('click', ()=>{ adicionarAlternativa(wrapper); });
+      // adicionar 2 alternativas iniciais
+      adicionarAlternativa(wrapper); adicionarAlternativa(wrapper);
+    });
+
+    function adicionarAlternativa(wrapper){
+      const alts = wrapper.querySelector('.alternativas');
+      const idx = alts.children.length + 1;
+      const div = document.createElement('div'); div.className='campo alt';
+      div.innerHTML = `<input class='textoAlt' placeholder='Texto da alternativa'/><label>Correta <input type='radio' name='correta-${Date.now()}' class='radioCorreta'/></label>`;
+      alts.appendChild(div);
+    }
+
+    document.getElementById('btnPublicar').addEventListener('click', async ()=>{
+      const titulo = document.getElementById('titulo').value;
+      const sinopse = document.getElementById('sinopse').value;
+      const file = document.getElementById('imagemTema').files[0];
+      let imagemTema = null; if (file) imagemTema = await new Promise((r,rej)=>{let fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=e=>rej(e);fr.readAsDataURL(file);});
+      const usuario_id = sessionStorage.ID_USUARIO || 1;
+      const questoesEls = Array.from(document.querySelectorAll('#questoes > .card'));
+      const questoes = questoesEls.map(qel=>{
+        const pergunta = qel.querySelector('.pergunta').value;
+        const imgFileEl = qel.querySelector('.imgQuest');
+        const imgFile = imgFileEl && imgFileEl.files && imgFileEl.files[0];
+        let imgData = null; // not blocking
+        // coletar alternativas
+        const alternativas = Array.from(qel.querySelectorAll('.alt')).map(a=>{
+          return { texto: a.querySelector('.textoAlt').value, correta: a.querySelector('.radioCorreta').checked };
+        });
+        return { pergunta, alternativas, imagemFundo: null };
+      });
+
+      const payload = { titulo, sinopse, imagemTema, usuario_id, questoes };
+      const res = await fetch('/quizzes/criar', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+      if (res.ok){ alert('Quiz criado'); window.location='quizzes.html'; }
+      else { alert(await res.text()); }
+    });
+  </script>
+</body>
+</html>

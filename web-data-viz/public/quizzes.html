@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FicSiete - Quizzes</title>
+  <script src="./js/sessao.js"></script>
+  <script>window.NAV_ACTIVE = 'quizzes';</script>
+  <script src="./js/navbar.js"></script>
+  <link rel="stylesheet" href="./css/estilo.css" />
+  <link rel="stylesheet" href="./css/ficsite-conteudo.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="container">
+      <h1 class="titulo">FicSiete</h1>
+      <ul class="navbar">
+        <!-- navbar will be populated by js/navbar.js -->
+      </ul>
+    </div>
+  </div>
+
+  <div class="container main-conteudo">
+    <div class="top-actions">
+      <h2>Quizzes</h2>
+      <a href="quizCriar.html" class="botao">Criar Quiz</a>
+    </div>
+
+    <div id="listaQuizzes" class="grid-cards"></div>
+  </div>
+
+  <script>
+    async function carregar(){
+      const el = document.getElementById('listaQuizzes');
+      el.innerHTML = '';
+      let res = await fetch('/quizzes/listar');
+      if (res.ok){
+        let dados = await res.json();
+        dados.forEach(q=>{
+          let card=document.createElement('div'); card.className='card-mini';
+          card.innerHTML=`<h4>${q.titulo}</h4><small>${q.dtCriacao}</small><div><a class='botao' href='quizResolucao.html?id=${q.id}'>Iniciar Provação</a></div>`;
+          el.appendChild(card);
+        })
+      }
+    }
+    carregar();
+  </script>
+</body>
+</html>

@@ -31,11 +31,23 @@ function autenticar(req, res) {
                                         id: resultadoAutenticar[0].id,
                                         email: resultadoAutenticar[0].email,
                                         nome: resultadoAutenticar[0].nome,
-                                        senha: resultadoAutenticar[0].senha,
+                                        // include avatar, arroba and tipoConta so frontend can persist them in session
+                                        imgAvatar: resultadoAutenticar[0].imgAvatar,
+                                        arroba: resultadoAutenticar[0].arroba,
+                                        tipoConta: resultadoAutenticar[0].tipoConta,
                                         aquarios: resultadoAquarios
                                     });
                                 } else {
-                                    return res.status(201).json({ aquarios: [] });      // Era 204 o código, para "sem corpo", "sem conteúdo", mas não cabe à minha regra de negócio
+                                    // even when there are no aquarios, return user info so frontend can set session values
+                                    return res.status(201).json({
+                                        id: resultadoAutenticar[0].id,
+                                        email: resultadoAutenticar[0].email,
+                                        nome: resultadoAutenticar[0].nome,
+                                        imgAvatar: resultadoAutenticar[0].imgAvatar,
+                                        arroba: resultadoAutenticar[0].arroba,
+                                        tipoConta: resultadoAutenticar[0].tipoConta,
+                                        aquarios: []
+                                    });
                                 }
                             })
                     } else if (resultadoAutenticar.length == 0) {

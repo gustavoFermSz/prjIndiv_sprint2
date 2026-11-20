@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FicSiete - Publicações</title>
+  <script src="./js/sessao.js"></script>
+  <script src="./js/navbar.js"></script>
+  <link rel="stylesheet" href="./css/estilo.css" />
+  <link rel="stylesheet" href="./css/ficsite-conteudo.css" />
+  <script>window.NAV_ACTIVE = 'publicacoes';</script>
+  <script src="./js/sessao.js"></script>
+  <script src="./js/navbar.js"></script>
+</head>
+<body>
+  <div class="header">
+    <div class="container">
+      <h1 class="titulo">FicSiete</h1>
+      <ul class="navbar">
+        <!-- navbar will be populated by js/navbar.js -->
+      </ul>
+    </div>
+  </div>
+
+  <div class="container main-conteudo">
+    <div class="top-actions">
+      <h2>Publicações</h2>
+      <button class="botao" id="btnNovo">Criar Publicação</button>
+    </div>
+
+    <div id="listaPublicacoes" class="grid-cards"></div>
+  </div>
+
+  <!-- Modal simples para criar postagem -->
+  <div id="modalPublicar" class="modal">
+    <div class="modal-content">
+      <h3>Criar Publicação</h3>
+      <div class="campo">
+        <input id="titulo_input" type="text" placeholder="Título da publicação" />
+      </div>
+      <div class="campo">
+        <input id="tipo_input" type="text" placeholder="Mundo ficcional (ex.: Distopia)" />
+      </div>
+      <div class="campo">
+        <input id="capa_input" type="file" />
+      </div>
+      <div class="actions">
+        <button class="botao" id="btnSalvar">Publicar</button>
+        <button class="botao sec" id="btnFechar">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const lista = document.getElementById('listaPublicacoes');
+    const modal = document.getElementById('modalPublicar');
+    const btnNovo = document.getElementById('btnNovo');
+    const btnFechar = document.getElementById('btnFechar');
+    const btnSalvar = document.getElementById('btnSalvar');
+
+    function abrirModal(){ modal.style.display = 'flex'; }
+    function fecharModal(){ modal.style.display = 'none'; }
+
+    btnNovo.addEventListener('click', abrirModal);
+    btnFechar.addEventListener('click', fecharModal);
+
+    async function carregar(){
+      lista.innerHTML = '';
+      let res = await fetch('/publicacoes/listar');
+      if (res.ok) {
+        let dados = await res.json();
+        dados.forEach(p => {
+          let card = document.createElement('div');
+          card.className = 'card-mini';
+          card.innerHTML = `<h4>${p.titulo}</h4><p>Autor: ${p.nome}</p><small>${p.momentoCriacao}</small>`;
+          lista.appendChild(card);
+        });
+      }
+    }
+
+    btnSalvar.addEventListener('click', async () => {
+      const titulo = document.getElementById('titulo_input').value;
+      const tipo = document.getElementById('tipo_input').value;
+      const capaFile = document.getElementById('capa_input').files[0];
+      let imgData = null;
+      if (capaFile) {
+        imgData = await new Promise((resolve, reject) => {
+          let reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = e => reject(e);
+          reader.readAsDataURL(capaFile);
+        });
+      }
+
+      // usuário atual provisório: usar sessionStorage.ID_USUARIO quando houver login
+      const usuarioId = sessionStorage.ID_USUARIO || 1;
+
+      let res = await fetch(`/publicacoes/publicar/${usuarioId}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ titulo, imgCapa: imgData, tipoMundoFiccional: tipo })
+      });
+      if (res.ok) {
+        fecharModal();
+        carregar();
+      } else {
+        let txt = await res.text();
+        alert('Erro: ' + txt);
+      }
+    });
+
+    carregar();
+  </script>
+</body>
+</html>

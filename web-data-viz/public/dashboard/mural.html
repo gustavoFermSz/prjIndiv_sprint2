@@ -19,14 +19,14 @@
         rel="stylesheet">
 </head>
 
-<body> <!-- onload="validarSessao(), atualizarFeed()" style="background-color: #161618;" -->
+<body onload="validarSessao()"> <!-- previously: validarSessao(), atualizarFeed() -->
 
     <div class="janela">
 
 
         <div class="header-left">
 
-            <h1>AquaTech</h1>
+            <h1>FicSiete</h1>
 
             <div class="hello">
                 <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
@@ -45,7 +45,7 @@
             </div>
 
             <div class="btn-nav">
-                <a href="#">
+                <a href="#" class="agora">
                     <h3>Mural<span id="b_carta"></span></h3>
                 </a>
             </div>
@@ -134,7 +134,7 @@
             descricao: form_postagem.descricao.value
         }
 
-        fetch(`/avisos/publicar/${idUsuario}`, {
+        fetch(`/publicacoes/publicar/${idUsuario}`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
@@ -173,7 +173,7 @@
 
     function deletar(idAviso) {
         console.log("Criar função de apagar post escolhido - ID" + idAviso);
-        fetch(`/avisos/deletar/${idAviso}`, {
+        fetch(`/publicacoes/deletar/${idAviso}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -194,7 +194,7 @@
     }
 
     function atualizarFeed() {
-        fetch("/avisos/listar").then(function (resposta) {
+        fetch("/publicacoes/listar").then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
                     var feed = document.getElementById("feed_container");

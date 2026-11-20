@@ -28,7 +28,7 @@
 
 <!-- <body onload=" atualizarFeed()"> -->
 
-<body>
+<body onload="validarSessao()">
 
     <div class="janela">
         <div class="header-left">
@@ -38,39 +38,25 @@
                 <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
             </div>
 
-            <div class="btn-nav-white">
-                <a href="#">
-                    <h3>Usuarios</h3>
-                </a>
-            </div>
-
-            <div class="btn-nav-white">
-                <a href="./cards.html">
-                    <h3>Cartas<span id="b_carta"></span></h3>
-                </a>
-            </div>
-
-            <div class="btn-nav">
-                <a href="./mural.html">
-                    <h3>Mural<span id="b_posts"></span></h3>
-                </a>
-            </div>
-
-            <div class="btn-nav-white">
-                <a href="#">
-                    <h3>Quizzes<span id="b_quizes"></span></h3>
-                </a>
-            </div>
+            <nav>
+              <ul class="dashboard-nav">
+                <li><a id="linkHome" class="dash-link" href="../index.html">Home</a></li>
+                <li><a id="linkMural" class="dash-link" href="./mural.html">Mural <span id="b_posts"></span></a></li>
+                <li><a id="linkQuizzes" class="dash-link agora" href="./dashboard.html">Quizzes <span id="b_quizes"></span></a></li>
+                <li><a id="linkCards" class="dash-link" href="./cards.html">Cartas <span id="b_carta"></span></a></li>
+                <li><a id="linkUsuarios" class="dash-link" href="#">Usuários</a></li>
+              </ul>
+            </nav>
 
             <div class="info_conta_e_sair">
 
                 <div class="infos_sidebar">
-                    <img src="../assets/icon/usuario_comum.png" alt="Messi">
-                    <h5>Lucas Theodósio</h5>
+                    <img src="../assets/icon/usuario_comum.png" alt="avatar" id="dashAvatar">
+                    <h5 id="dashName">Usuário</h5>
                 </div>
 
                 <div class="btn-logout" onclick="limparSessao()">
-                    <img src="../assets/icon/seta_logout.png" alt="Messi">
+                    <img src="../assets/icon/seta_logout.png" alt="Sair">
 
                 </div>
 
@@ -96,8 +82,15 @@
 </html>
 
 <!--
+-->
 <script>
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    // populate user info in dashboard
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO || 'Usuário';
+    document.getElementById('dashName').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
+    const dashAvatar = document.getElementById('dashAvatar');
+    if (dashAvatar) dashAvatar.src = sessionStorage.AVATAR_USUARIO || '../assets/icon/usuario_comum.png';
+
+    // sidebar active state is set statically per page using the 'agora' class in the HTML
 
     let proximaAtualizacao;
 
@@ -175,153 +168,27 @@
     // 2. plotarGrafico -> Monta o gráfico com os dados trazidos e exibe em tela
     // 3. atualizarGrafico -> Atualiza o gráfico, trazendo novamente dados do Banco
 
-    // Esta função *obterDadosGrafico* busca os últimos dados inseridos em tabela de medidas.
-    // para, quando carregar o gráfico da primeira vez, já trazer com vários dados.
-    // A função *obterDadosGrafico* também invoca a função *plotarGrafico*
+    // Simplified dashboard summary for FicSiete: show counts of publicacoes, cartas e quizzes
+    async function atualizarResumo() {
+        try {
+            let resP = await fetch('/publicacoes/listar');
+            let posts = [];
+            if (resP.ok && resP.status !== 204) posts = await resP.json();
+            document.getElementById('b_posts').innerText = posts.length ? ` (${posts.length})` : '';
 
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function obterDadosGrafico(idAquario) {
+            let resC = await fetch('/cartas/listar');
+            let cartas = [];
+            if (resC.ok && resC.status !== 204) cartas = await resC.json();
+            document.getElementById('b_carta').innerText = cartas.length ? ` (${cartas.length})` : '';
 
-        alterarTitulo(idAquario)
-
-        if (proximaAtualizacao != undefined) {
-            clearTimeout(proximaAtualizacao);
+            let resQ = await fetch('/quizzes/listar');
+            let quizzes = [];
+            if (resQ.ok && resQ.status !== 204) quizzes = await resQ.json();
+            document.getElementById('b_quizes').innerText = quizzes.length ? ` (${quizzes.length})` : '';
+        } catch (e) {
+            console.error('Erro ao atualizar resumo do dashboard', e);
         }
-
-        fetch(`/medidas/ultimas/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                    resposta.reverse();
-
-                    plotarGrafico(resposta, idAquario);
-
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
     }
 
-    // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
-    // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
-    // A função *plotarGrafico* também invoca a função *atualizarGrafico*
-    function plotarGrafico(resposta, idAquario) {
-
-        console.log('iniciando plotagem do gráfico...');
-
-        // Criando estrutura para plotar gráfico - labels
-        let labels = [];
-
-        // Criando estrutura para plotar gráfico - dados
-        let dados = {
-            labels: labels,
-            datasets: [
-            {
-                label: 'Temperatura',
-                data: [],
-                fill: false,
-                borderColor: 'rgb(199, 52, 52)',
-                tension: 0.1
-            }]
-        };
-
-        console.log('----------------------------------------------')
-        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
-        console.log(resposta)
-
-        // Inserindo valores recebidos em estrutura para plotar o gráfico
-        for (i = 0; i < resposta.length; i++) {
-            var registro = resposta[i];
-            labels.push(registro.momento_grafico);
-            dados.datasets[0].data.push(registro.temperatura);
-        }
-
-        console.log('----------------------------------------------')
-        console.log('O gráfico será plotado com os respectivos valores:')
-        console.log('Labels:')
-        console.log(labels)
-        console.log('Dados:')
-        console.log(dados.datasets)
-        console.log('----------------------------------------------')
-
-        // Criando estrutura para plotar gráfico - config
-        const config = {
-            type: 'line',
-            data: dados,
-        };
-
-        // Adicionando gráfico criado em div na tela
-        let myChart = new Chart(
-            document.getElementById(`myChartCanvas${idAquario}`),
-            config
-        );
-
-        setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-    }
-
-
-    // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
-    // buscando a última medida inserida em tabela contendo as capturas, 
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function atualizarGrafico(idAquario, dados, myChart) {
-
-
-
-        fetch(`/medidas/tempo-real/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (novoRegistro) {
-
-                    obterdados(idAquario);
-                    // alertar(novoRegistro, idAquario);
-                    console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
-                    console.log(`Dados atuais do gráfico:`);
-                    console.log(dados);
-
-                    let avisoCaptura = document.getElementById(`avisoCaptura${idAquario}`)
-                    avisoCaptura.innerHTML = ""
-
-
-                    if (novoRegistro[0].momento_grafico == dados.labels[dados.labels.length - 1]) {
-                        console.log("---------------------------------------------------------------")
-                        console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                        avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
-                        console.log("Horário do novo dado capturado:")
-                        console.log(novoRegistro[0].momento_grafico)
-                        console.log("Horário do último dado capturado:")
-                        console.log(dados.labels[dados.labels.length - 1])
-                        console.log("---------------------------------------------------------------")
-                    } else {
-                        // tirando e colocando valores no gráfico
-                        dados.labels.shift(); // apagar o primeiro
-                        dados.labels.push(novoRegistro[0].momento_grafico); // incluir um novo momento
-
-                        dados.datasets[0].data.shift();  // apagar o primeiro de temperatura
-                        dados.datasets[0].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
-
-                        myChart.update();
-                    }
-
-                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                    proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-            }
-        })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
-
-    }
+    atualizarResumo();
 </script>
-
--->

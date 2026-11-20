@@ -1,81 +1,80 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>FicSiete | Cartas</title>
-
-    <script src="./js/sessao.js"></script>
-
-    <link rel="stylesheet" href="./css/estilo.css">
-    <link rel="icon" href="./assets/icon/favicon2.ico">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FicSiete - Cartas</title>
+  <script src="./js/sessao.js"></script>
+  <script src="./js/navbar.js"></script>
+  <link rel="stylesheet" href="./css/estilo.css" />
+  <link rel="stylesheet" href="./css/ficsite-conteudo.css" />
+  <script>window.NAV_ACTIVE = 'cartas';</script>
+  <script src="./js/sessao.js"></script>
+  <script src="./js/navbar.js"></script>
 </head>
-
 <body>
+  <div class="header">
+    <div class="container">
+      <h1 class="titulo">FicSiete</h1>
+      <ul class="navbar">
+        <!-- navbar will be populated by js/navbar.js -->
+      </ul>
+    </div>
+  </div>
 
-    <!--header inicio-->
-    <div class="header">
-        <div class="container">
-            <h1 class="titulo">AquaTech</h1>
-            <ul class="navbar">
-                <li>
-                    <a href="./index.html">Inicial</a>
-                </li>
-                <li class="agora">Simulador</li> <!-- Antigo nome desta tela que terá seu arquivo reaproveitado -->
-                <li>|</li>
-                <li>
-                    <a href="./login.html">Login</a>
-                </li>
-                <li>
-                    <a href="./login.html">Cadastro</a>
-                </li>
-            </ul>
-        </div>
+  <div class="container main-conteudo">
+    <div class="top-actions">
+      <h2>Galeria de Cartas</h2>
+      <button id="btnNovaCarta" class="botao">Forjar Nova Carta</button>
     </div>
 
+    <div id="listaCartas" class="grid-cards"></div>
+  </div>
 
-    <!-- simulador inicio -->
-    <div class="simulador">
-        <div class="container">
-            <h2>Simulador</h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium tempora architecto sint fugit
-                dolorum? Ipsum laborum magnam similique labore, voluptate amet reprehenderit rem ab blanditiis quisquam
-                laboriosam eaque alias. Reiciendis. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Accusantium tempora architecto sint fugit dolorum? Ipsum laborum magnam similique labore, voluptate amet
-                reprehenderit rem ab blanditiis quisquam laboriosam eaque alias. Reiciendis.</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium tempora architecto sint fugit
-                dolorum? Ipsum laborum magnam similique labore, voluptate amet reprehenderit rem ab blanditiis quisquam
-                laboriosam eaque alias. Reiciendis. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Accusantium tempora architecto sint fugit dolorum? Ipsum laborum magnam similique labore, voluptate amet
-                reprehenderit rem ab blanditiis quisquam laboriosam eaque alias. Reiciendis.</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium tempora architecto sint fugit
-                dolorum? Ipsum laborum magnam similique labore, voluptate amet reprehenderit rem ab blanditiis quisquam
-                laboriosam eaque alias. Reiciendis. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Accusantium tempora architecto sint fugit dolorum? Ipsum laborum magnam similique labore, voluptate amet
-                reprehenderit rem ab blanditiis quisquam laboriosam eaque alias. Reiciendis.</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium tempora architecto sint fugit
-                dolorum? Ipsum laborum magnam similique labore, voluptate amet reprehenderit rem ab blanditiis quisquam
-                laboriosam eaque alias. Reiciendis. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Accusantium tempora architecto sint fugit dolorum? Ipsum laborum magnam similique labore, voluptate amet
-                reprehenderit rem ab blanditiis quisquam laboriosam eaque alias. Reiciendis.</p>
-
-        </div>
+  <div id="modalForja" class="modal">
+    <div class="modal-content large">
+      <h3>Forjar Carta</h3>
+      <div class="campo"><input id="tituloCarta" placeholder="Título da Carta"/></div>
+      <div class="campo"><input id="tipoMundo" placeholder="Mundo ficcional"/></div>
+      <div class="campo"><input id="nivelForca" placeholder="Nível de Força"/></div>
+      <div class="campo"><input id="capaCarta" type="file"/></div>
+      <div class="actions"><button id="btnForjar" class="botao">Forjar</button><button id="btnFecharForja" class="botao sec">Fechar</button></div>
     </div>
-    <!-- simulador fim -->
+  </div>
 
-    <!--footer inicio-->
-    <div class="footer">
-        <div class="container">
-            <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023-2026</h4>
-        </div>
-    </div>
-    <!--footer fim-->
+  <script>
+    const lista = document.getElementById('listaCartas');
+    const modal = document.getElementById('modalForja');
+    document.getElementById('btnNovaCarta').addEventListener('click', ()=> modal.style.display='flex');
+    document.getElementById('btnFecharForja').addEventListener('click', ()=> modal.style.display='none');
 
+    async function carregar(){
+      lista.innerHTML = '';
+      let res = await fetch('/cartas/listar');
+      if (res.ok) {
+        let dados = await res.json();
+        dados.forEach(c => {
+          let card = document.createElement('div');
+          card.className = 'card-mini';
+          card.innerHTML = `<h4>${c.titulo}</h4><p>Autor: ${c.nome}</p><small>${c.dtConfeccao}</small>`;
+          lista.appendChild(card);
+        });
+      }
+    }
 
+    document.getElementById('btnForjar').addEventListener('click', async ()=>{
+      const titulo = document.getElementById('tituloCarta').value;
+      const tipo = document.getElementById('tipoMundo').value;
+      const nivel = document.getElementById('nivelForca').value;
+      const file = document.getElementById('capaCarta').files[0];
+      let data=null;
+      if (file) data = await new Promise((r,rej)=>{let fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=e=>rej(e);fr.readAsDataURL(file);});
+      const usuarioId = sessionStorage.ID_USUARIO || 1;
+      let res = await fetch(`/cartas/publicar/${usuarioId}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ titulo, img: data, tipoMundoFiccional: tipo, nivelForca: nivel }) });
+      if (res.ok){ modal.style.display='none'; carregar(); } else { alert(await res.text()); }
+    });
+
+    carregar();
+  </script>
 </body>
-
 </html>
