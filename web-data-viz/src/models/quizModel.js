@@ -54,3 +54,10 @@ module.exports = {
     buscarCompleto,
     criar
 };
+
+async function buscarImagem(quizId) {
+    var instrucaoSql = `SELECT imagemTema AS imagem, mimeImagem AS mime FROM quiz WHERE id = ${quizId};`;
+    return database.executar(instrucaoSql);
+}
+
+module.exports.buscarImagem = buscarImagem;

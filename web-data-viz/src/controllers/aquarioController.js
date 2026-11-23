@@ -1,5 +1,5 @@
 var aquarioModel = require("../models/aquarioModel");
-
+// ESTE ARQUIVO SÓ SERÁ USADO PARA BASEAR ESTRUTURA E NÍVEL DE COMPLEXIDADE (QUAIS FUNÇÕES E COMO) SERÃO USADAS NA APLICAÇÃO FICSIETE, ENTIDADES NÃO CONSTANTES NAS TABELAS DE script-ficsiete.sql NÃO DEVEM SER CONSIDERADAS PARA USO EFETIVO NO CÓDIGO!
 function buscarAquariosPorEmpresa(req, res) {
   var idUsuario = req.params.idUsuario;
 

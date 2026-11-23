@@ -24,12 +24,23 @@
   </div>
 
   <div class="container main-conteudo">
-    <div class="top-actions">
-      <h2>Publicações</h2>
-      <button class="botao" id="btnNovo">Criar Publicação</button>
-    </div>
+    <div class="mural-panel" style="width:100%">
+      <div class="mural-header">
+        <h2>Mural de Publicações</h2>
+        <div class="mural-sub">Ordenadas por Mais Recentes • <strong id="totalCount">0</strong> catalogadas</div>
+      </div>
 
-    <div id="listaPublicacoes" class="grid-cards"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+        <div class="mural-search">
+          <input type="text" id="searchInput" placeholder="Buscar por título, autor (@arroba), gênero..." />
+        </div>
+        <div class="mural-actions">
+          <button class="btn-novo" id="btnNovo">Nova Crônica</button>
+        </div>
+      </div>
+
+      <div id="listaPublicacoes" class="grid-cards"></div>
+    </div>
   </div>
 
   <!-- Modal simples para criar postagem -->
@@ -42,8 +53,23 @@
       <div class="campo">
         <input id="tipo_input" type="text" placeholder="Mundo ficcional (ex.: Distopia)" />
       </div>
-      <div class="campo">
+    <div class="campo">
         <input id="capa_input" type="file" />
+    </div>
+      <div class="campo">
+        <div id="paragrafosContainer">
+          <div class="paragrafo-item" data-index="1">
+            <h4>Parágrafo 1</h4>
+            <div class="campo"><input class="numero_input" type="number" value="1" min="1" max="6"/></div>
+            <div class="campo"><input class="subtitulo_input" type="text" placeholder="Subtítulo (opcional)"/></div>
+            <div class="campo"><textarea class="conteudo_input" placeholder="Conteúdo do parágrafo"></textarea></div>
+            <div class="campo"><input class="imgparagrafo_input" type="file"/></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="botao" id="btnAddPar">Adicionar Parágrafo</button>
+          <button class="botao sec" id="btnRemPar">Remover Parágrafo</button>
+        </div>
       </div>
       <div class="actions">
         <button class="botao" id="btnSalvar">Publicar</button>
@@ -52,6 +78,46 @@
     </div>
   </div>
 
+  <!-- Modal de visualização da publicação -->
+  <div id="modalVisualizar" class="modal">
+    <div class="modal-content large" id="visualizarContent">
+      <button class="botao sec" id="btnFecharVisual">Fechar</button>
+      <h2 id="viewTitulo"></h2>
+      <div id="viewMeta" class="campo"></div>
+      <img id="viewCapa" src="" alt="Capa" style="width:100%; border-radius:8px; margin:8px 0; max-height:360px; object-fit:cover;"/>
+      <div id="viewParagrafos"></div>
+      <div class="actions">
+        <button class="botao" id="btnEditarView">Editar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de edição (preenchido pelo conteúdo atual) -->
+  <div id="modalEditar" class="modal">
+    <div class="modal-content large" style="width:90vw; height:90vh; overflow:auto;" id="editarContent">
+      <h3>Editar Publicação</h3>
+      <div class="campo"><input id="edit_titulo" type="text" placeholder="Título da publicação" /></div>
+      <div class="campo"><input id="edit_tipo" type="text" placeholder="Mundo ficcional (ex.: Ficção especulativa)" /></div>
+      <div class="campo">
+        <label>Capa atual:</label>
+        <img id="edit_capa_preview" src="" style="width:200px; display:block; border-radius:8px;" />
+        <div><input id="edit_capa_file" type="file" /></div>
+      </div>
+      <div class="campo">
+        <h4>Parágrafos</h4>
+        <div id="edit_paragrafosContainer"></div>
+        <div class="actions"><button class="botao" id="btnEditAddPar">Adicionar Parágrafo</button> <button class="botao sec" id="btnEditRemPar">Remover Parágrafo</button></div>
+      </div>
+      <div class="actions">
+        <button class="botao" id="btnSalvarEdicao">Salvar</button>
+        <button class="botao sec" id="btnFecharEdicao">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+</html>
   <script>
     const lista = document.getElementById('listaPublicacoes');
     const modal = document.getElementById('modalPublicar');
@@ -59,46 +125,292 @@
     const btnFechar = document.getElementById('btnFechar');
     const btnSalvar = document.getElementById('btnSalvar');
 
+    const modalVisual = document.getElementById('modalVisualizar');
+    const btnFecharVisual = document.getElementById('btnFecharVisual');
+    const viewTitulo = document.getElementById('viewTitulo');
+    const viewMeta = document.getElementById('viewMeta');
+    const viewCapa = document.getElementById('viewCapa');
+    const viewParagrafos = document.getElementById('viewParagrafos');
+    const btnEditarView = document.getElementById('btnEditarView');
+
+    const modalEditar = document.getElementById('modalEditar');
+    const btnFecharEdicao = document.getElementById('btnFecharEdicao');
+    const btnSalvarEdicao = document.getElementById('btnSalvarEdicao');
+    const editTitulo = document.getElementById('edit_titulo');
+    const editTipo = document.getElementById('edit_tipo');
+    const editCapaPreview = document.getElementById('edit_capa_preview');
+    const editCapaFile = document.getElementById('edit_capa_file');
+    const editParagContainer = document.getElementById('edit_paragrafosContainer');
+    const btnEditAddPar = document.getElementById('btnEditAddPar');
+    const btnEditRemPar = document.getElementById('btnEditRemPar');
+
     function abrirModal(){ modal.style.display = 'flex'; }
     function fecharModal(){ modal.style.display = 'none'; }
+    function abrirModalVisual(){ modalVisual.style.display = 'flex'; }
+    function fecharModalVisual(){ modalVisual.style.display = 'none'; }
+    function abrirModalEditar(){ modalEditar.style.display = 'flex'; }
+    function fecharModalEditar(){ modalEditar.style.display = 'none'; }
 
     btnNovo.addEventListener('click', abrirModal);
     btnFechar.addEventListener('click', fecharModal);
 
-    async function carregar(){
+    // adicionar parágrafos no modal de criação
+    const btnAddPar = document.getElementById('btnAddPar');
+    const btnRemPar = document.getElementById('btnRemPar');
+    btnAddPar.addEventListener('click', addParagrafoCriar);
+    btnRemPar.addEventListener('click', removeParagrafoCriar);
+
+    function addParagrafoCriar() {
+      const container = document.getElementById('paragrafosContainer');
+      const items = container.getElementsByClassName('paragrafo-item');
+      if (items.length >= 6) { alert('Máximo 6 parágrafos'); return; }
+      const novoIndex = items.length + 1;
+      const div = document.createElement('div');
+      div.className = 'paragrafo-item';
+      div.setAttribute('data-index', novoIndex);
+      div.innerHTML = `
+        <h4>Parágrafo ${novoIndex}</h4>
+        <div class="campo"><input class="numero_input" type="number" value="${novoIndex}" min="1" max="6"/></div>
+        <div class="campo"><input class="subtitulo_input" type="text" placeholder="Subtítulo (opcional)"/></div>
+        <div class="campo"><textarea class="conteudo_input" placeholder="Conteúdo do parágrafo"></textarea></div>
+        <div class="campo"><input class="imgparagrafo_input" type="file"/></div>
+      `;
+      container.appendChild(div);
+    }
+
+    function removeParagrafoCriar() {
+      const container = document.getElementById('paragrafosContainer');
+      const items = container.getElementsByClassName('paragrafo-item');
+      if (items.length <= 1) { alert('Deve haver ao menos 1 parágrafo'); return; }
+      container.removeChild(items[items.length - 1]);
+    }
+
+    // adicionar/remover no modal de edição
+    btnEditAddPar.addEventListener('click', function(e){ e.preventDefault(); addParagrafoEditar(); });
+    btnEditRemPar.addEventListener('click', function(e){ e.preventDefault(); removeParagrafoEditar(); });
+    function addParagrafoEditar(prefill){
+      const items = editParagContainer.getElementsByClassName('paragrafo-item');
+      if (items.length >= 6) { alert('Máximo 6 parágrafos'); return; }
+      const novoIndex = items.length + 1;
+      const div = document.createElement('div');
+      div.className = 'paragrafo-item';
+      div.setAttribute('data-index', novoIndex);
+      div.innerHTML = `
+        <h4>Parágrafo ${novoIndex}</h4>
+        <div class="campo"><input class="numero_input" type="number" value="${novoIndex}" min="1" max="6"/></div>
+        <div class="campo"><input class="subtitulo_input" type="text" placeholder="Subtítulo (opcional)"/></div>
+        <div class="campo"><textarea class="conteudo_input" placeholder="Conteúdo do parágrafo"></textarea></div>
+        <div class="campo"><label>Imagem atual:</label><img class="par_img_preview" style="width:150px; display:block; border-radius:6px;"/><input class="imgparagrafo_file" type="file"/></div>
+        <input type="hidden" class="imgparagrafo_existing" value="" />
+      `;
+      editParagContainer.appendChild(div);
+      if (prefill) {
+        div.querySelector('.numero_input').value = prefill.numeroNaOrdem || novoIndex;
+        div.querySelector('.subtitulo_input').value = prefill.subtitulo || '';
+        div.querySelector('.conteudo_input').value = prefill.conteudo || '';
+        if (prefill.existingImgDataUrl) {
+          div.querySelector('.par_img_preview').src = prefill.existingImgDataUrl;
+          div.querySelector('.imgparagrafo_existing').value = prefill.existingImgDataUrl;
+        } else {
+          div.querySelector('.par_img_preview').style.display = 'none';
+        }
+      }
+    }
+
+    function removeParagrafoEditar(){
+      const items = editParagContainer.getElementsByClassName('paragrafo-item');
+      if (items.length <= 1) { alert('Deve haver ao menos 1 parágrafo'); return; }
+      editParagContainer.removeChild(items[items.length - 1]);
+    }
+
+    async function carregar(filter){
       lista.innerHTML = '';
       let res = await fetch('/publicacoes/listar');
       if (res.ok) {
         let dados = await res.json();
+        // show total count
+        const totalCountEl = document.getElementById('totalCount');
+        if (totalCountEl) totalCountEl.innerText = dados.length;
+        // optionally filter
+        if (filter && filter.trim()) {
+          const q = filter.trim().toLowerCase();
+          dados = dados.filter(d => (d.titulo || '').toLowerCase().includes(q) || (d.nome || '').toLowerCase().includes(q));
+        }
         dados.forEach(p => {
           let card = document.createElement('div');
           card.className = 'card-mini';
-          card.innerHTML = `<h4>${p.titulo}</h4><p>Autor: ${p.nome}</p><small>${p.momentoCriacao}</small>`;
+          card.innerHTML = `
+            <img class="capa" src="/publicacoes/${p.id}/capa" alt="capa" />
+            <h4>${p.titulo}</h4>
+            <div class="meta">${p.nome} • ${new Date(p.momentoCriacao).toLocaleString()}</div>
+            <div class="meta">${p.qtdParagrafos || 0} parágrafo(s)</div>
+          `;
+          card.addEventListener('click', () => abrirVisual(p.id));
           lista.appendChild(card);
         });
       }
     }
 
+    // search hook
+    const searchInputEl = document.getElementById('searchInput');
+    if (searchInputEl) {
+      searchInputEl.addEventListener('input', function(e){
+        carregar(e.target.value);
+      });
+    }
+
+    async function abrirVisual(id) {
+      // buscar publicação
+      let res = await fetch(`/publicacoes/${id}`);
+      if (!res.ok) { alert('Erro ao carregar publicação'); return; }
+      let pub = await res.json();
+      viewTitulo.innerText = pub.titulo;
+      viewMeta.innerText = `Autor: ${pub.nome} • ${new Date(pub.momentoCriacao).toLocaleString()}`;
+      viewCapa.src = `/publicacoes/${id}/capa`;
+      // render parágrafos
+      viewParagrafos.innerHTML = '';
+      for (let i = 0; i < pub.paragrafos.length; i++) {
+        const p = pub.paragrafos[i];
+        const div = document.createElement('div');
+        div.className = 'card-full';
+        div.innerHTML = `<h4>${p.numeroNaOrdem}. ${p.subtitulo || ''}</h4><p>${p.conteudo}</p>`;
+        if (p.temImagem) {
+          const img = document.createElement('img');
+          img.src = `/publicacoes/${id}/paragrafo/${p.id}/img`;
+          img.style.width = '100%'; img.style.borderRadius = '6px'; img.style.marginTop = '8px'; img.style.objectFit = 'cover';
+          div.appendChild(img);
+        }
+        viewParagrafos.appendChild(div);
+      }
+      // attach edit button
+      btnEditarView.onclick = () => abrirEditar(id);
+      abrirModalVisual();
+    }
+
+    btnFecharVisual.addEventListener('click', fecharModalVisual);
+
+    // abrir edição: preenche campos
+    async function abrirEditar(id) {
+      fecharModalVisual();
+      let res = await fetch(`/publicacoes/${id}`);
+      if (!res.ok) { alert('Erro ao carregar publicação para edição'); return; }
+      let pub = await res.json();
+      editTitulo.value = pub.titulo || '';
+      editTipo.value = pub.tipoMundoFiccional || '';
+      editCapaPreview.src = `/publicacoes/${id}/capa`;
+
+      // limpar container
+      editParagContainer.innerHTML = '';
+      // para cada parágrafo, buscar imagem (se tiver) e transformar em dataURL para preview
+      for (let i = 0; i < pub.paragrafos.length; i++) {
+        const p = pub.paragrafos[i];
+        let prefill = { numeroNaOrdem: p.numeroNaOrdem, subtitulo: p.subtitulo, conteudo: p.conteudo };
+        if (p.temImagem) {
+          try {
+            let blobRes = await fetch(`/publicacoes/${pub.id}/paragrafo/${p.id}/img`);
+            if (blobRes.ok) {
+              let blob = await blobRes.blob();
+              prefill.existingImgDataUrl = await blobToDataURL(blob);
+            }
+          } catch (err) { console.log('erro ao buscar img par', err); }
+        }
+        addParagrafoEditar(prefill);
+      }
+      abrirModalEditar();
+      // salvar handler
+      btnSalvarEdicao.onclick = async () => {
+        await salvarEdicao(pub.id);
+      };
+      btnFecharEdicao.onclick = fecharModalEditar;
+    }
+
+    function blobToDataURL(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = e => reject(e);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    async function salvarEdicao(id) {
+      const titulo = editTitulo.value;
+      const tipo = editTipo.value;
+      // capa: if user selected file, use it; otherwise keep existing by not sending imgCapa
+      let imgCapaData = undefined;
+      if (editCapaFile.files && editCapaFile.files[0]) {
+        imgCapaData = await fileToDataURL(editCapaFile.files[0]);
+      }
+
+      // coletar paragrafos do editor
+      const paragrafos = [];
+      const items = editParagContainer.getElementsByClassName('paragrafo-item');
+      for (let i = 0; i < items.length; i++) {
+        const it = items[i];
+        const numero = parseInt(it.querySelector('.numero_input').value || (i+1));
+        const subtitulo = it.querySelector('.subtitulo_input').value;
+        const conteudo = it.querySelector('.conteudo_input').value;
+        const fileInput = it.querySelector('.imgparagrafo_file');
+        const existingHidden = it.querySelector('.imgparagrafo_existing');
+        let imgData = null;
+        if (fileInput && fileInput.files[0]) {
+          imgData = await fileToDataURL(fileInput.files[0]);
+        } else if (existingHidden && existingHidden.value) {
+          imgData = existingHidden.value; // preserve current image by sending its dataURL
+        }
+        paragrafos.push({ numeroNaOrdem: numero, subtitulo: subtitulo, conteudo: conteudo, imgParagrafo: imgData });
+      }
+
+      let res = await fetch(`/publicacoes/editar/${id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ titulo, imgCapa: imgCapaData, tipoMundoFiccional: tipo, paragrafos })
+      });
+      if (res.ok) {
+        fecharModalEditar();
+        carregar();
+      } else {
+        let txt = await res.text();
+        alert('Erro ao salvar: ' + txt);
+      }
+    }
+
+    function fileToDataURL(file){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = e => reject(e);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // salvar novo post (criar)
     btnSalvar.addEventListener('click', async () => {
       const titulo = document.getElementById('titulo_input').value;
       const tipo = document.getElementById('tipo_input').value;
       const capaFile = document.getElementById('capa_input').files[0];
       let imgData = null;
-      if (capaFile) {
-        imgData = await new Promise((resolve, reject) => {
-          let reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = e => reject(e);
-          reader.readAsDataURL(capaFile);
-        });
+      if (capaFile) imgData = await fileToDataURL(capaFile);
+
+      // coletar parágrafos
+      const paragrafos = [];
+      const container = document.getElementById('paragrafosContainer');
+      const itemsCriar = container.getElementsByClassName('paragrafo-item');
+      for (let i = 0; i < itemsCriar.length; i++) {
+        const it = itemsCriar[i];
+        const numero = parseInt(it.querySelector('.numero_input').value || (i+1));
+        const subtitulo = it.querySelector('.subtitulo_input').value;
+        const conteudo = it.querySelector('.conteudo_input').value;
+        const file = it.querySelector('.imgparagrafo_input').files[0];
+        let imgParData = null;
+        if (file) imgParData = await fileToDataURL(file);
+        paragrafos.push({ numeroNaOrdem: numero, subtitulo: subtitulo, conteudo: conteudo, imgParagrafo: imgParData });
       }
 
-      // usuário atual provisório: usar sessionStorage.ID_USUARIO quando houver login
       const usuarioId = sessionStorage.ID_USUARIO || 1;
 
       let res = await fetch(`/publicacoes/publicar/${usuarioId}`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ titulo, imgCapa: imgData, tipoMundoFiccional: tipo })
+        body: JSON.stringify({ titulo, imgCapa: imgData, tipoMundoFiccional: tipo, paragrafos })
       });
       if (res.ok) {
         fecharModal();
@@ -111,5 +423,3 @@
 
     carregar();
   </script>
-</body>
-</html>

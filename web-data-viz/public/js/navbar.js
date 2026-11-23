@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const active = typeof window !== 'undefined' ? window.NAV_ACTIVE || '' : '';
 
         if (email && nome) {
-            const avatar = sessionStorage.AVATAR_USUARIO || './assets/icon/usuario_comum.png';
+            // use absolute path for fallback so pages in subfolders still find the asset
+            const avatar = sessionStorage.AVATAR_USUARIO || '/assets/icon/usuario_comum.png';
             // logged in
             return `
                 <li><a href="index.html" class="${active === 'home' ? 'agora' : ''}">Home</a></li>

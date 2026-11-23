@@ -1,5 +1,5 @@
 var usuarioModel = require("../models/usuarioModel");
-var aquarioModel = require("../models/aquarioModel");
+// var aquarioModel = require("../models/aquarioModel"); aquario não é mais uma entidade relevante para o sistema, seu código só deve ser utilizado de exempo para simplicidade e forma de estruturação do código, não ativamente nas validações e afins.
 
 let fs = require('fs').promises;
 let path = require('path'); // entender melhor para que serve, depois
@@ -24,9 +24,9 @@ function autenticar(req, res) {
                     if (resultadoAutenticar.length == 1) {
                         console.log(resultadoAutenticar);
 
-                        aquarioModel.buscarAquariosPorEmpresa(resultadoAutenticar[0].empresaId)
-                            .then((resultadoAquarios) => {
-                                if (resultadoAquarios.length > 0) {
+                        // aquarioModel.buscarAquariosPorEmpresa(resultadoAutenticar[0].empresaId)
+                        //     .then((resultadoAquarios) => {
+                        //         if (resultadoAquarios.length > 0) {
                                     return res.json({
                                         id: resultadoAutenticar[0].id,
                                         email: resultadoAutenticar[0].email,
@@ -34,22 +34,21 @@ function autenticar(req, res) {
                                         // include avatar, arroba and tipoConta so frontend can persist them in session
                                         imgAvatar: resultadoAutenticar[0].imgAvatar,
                                         arroba: resultadoAutenticar[0].arroba,
-                                        tipoConta: resultadoAutenticar[0].tipoConta,
-                                        aquarios: resultadoAquarios
+                                        tipoConta: resultadoAutenticar[0].tipoConta
                                     });
-                                } else {
-                                    // even when there are no aquarios, return user info so frontend can set session values
-                                    return res.status(201).json({
-                                        id: resultadoAutenticar[0].id,
-                                        email: resultadoAutenticar[0].email,
-                                        nome: resultadoAutenticar[0].nome,
-                                        imgAvatar: resultadoAutenticar[0].imgAvatar,
-                                        arroba: resultadoAutenticar[0].arroba,
-                                        tipoConta: resultadoAutenticar[0].tipoConta,
-                                        aquarios: []
-                                    });
-                                }
-                            })
+                            //     } else {
+                            //         // não existe 'aquario' na lógica do ficsiete, se quiser buscar por algo, busquq por quizes, cartas ou publicações.
+                            //         return res.status(201).json({
+                            //             id: resultadoAutenticar[0].id,
+                            //             email: resultadoAutenticar[0].email,
+                            //             nome: resultadoAutenticar[0].nome,
+                            //             imgAvatar: resultadoAutenticar[0].imgAvatar,
+                            //             arroba: resultadoAutenticar[0].arroba,
+                            //             tipoConta: resultadoAutenticar[0].tipoConta
+                                        
+                            //         });
+                            //     }
+                            // })
                     } else if (resultadoAutenticar.length == 0) {
                         return res.status(403).send("Email e/ou senha inválido(s)");
                     } else {
@@ -254,3 +253,21 @@ module.exports = {
     cadastrar
     // , dadosUsuario
 }
+
+async function avatar(req, res) {
+    try {
+        var idUsuario = req.params.idUsuario;
+        let resultado = await usuarioModel.buscarAvatar(idUsuario);
+        if (!resultado || resultado.length === 0) return res.status(404).send('Avatar não encontrado');
+        const registro = resultado[0];
+        if (!registro.imagem) return res.status(404).send('Avatar vazio');
+        res.setHeader('Content-Type', registro.mime || 'application/octet-stream');
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+        return res.send(registro.imagem);
+    } catch (erro) {
+        console.log(erro);
+        return res.status(500).json(erro.sqlMessage || erro);
+    }
+}
+
+module.exports.avatar = avatar;

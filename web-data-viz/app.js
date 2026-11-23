@@ -25,6 +25,7 @@ var publicacoesRouter = require("./src/routes/publicacoes");
 var cartasRouter = require("./src/routes/cartas");
 var quizzesRouter = require("./src/routes/quizzes");
 var tentativasRouter = require("./src/routes/tentativas");
+var paragrafosRouter = require("./src/routes/paragrafos");
 
 app.use(express.json( { limit: '10mb' } )); // estudar esses 2 quando possível
 app.use(express.urlencoded({ extended: false, limit: '10mb' })); // limite expandido para 10mb para comportar envio de imagens
@@ -43,6 +44,7 @@ app.use("/publicacoes", publicacoesRouter);
 app.use("/cartas", cartasRouter);
 app.use("/quizzes", quizzesRouter);
 app.use('/tentativas', tentativasRouter);
+app.use('/paragrafos', paragrafosRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`

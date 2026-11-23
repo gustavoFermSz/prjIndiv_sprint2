@@ -23,7 +23,7 @@
     <div class="container">
       <h1 class="titulo">FicSiete</h1>
       <ul class="navbar">
-        <!-- navbar will be populated by js/navbar.js -->
+        <!-- navbar will be replaced here by the AI, because the content shouldn't be gone to the JS -->
       </ul>
     </div>
   </div>
@@ -130,7 +130,7 @@
 
 
 
-      <!-- CARD COPIADO DA TELA DE LOGIN, ALTERAR CONTEXTO DEPOIS -->
+      <!-- CARD COPIADO DA TELA DE LOGIN -->
       <div class="tl-redirect">
 
         <div class="card-redirect">
@@ -214,7 +214,7 @@
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
 
     let tiposImagemPermitidos = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
-    let limiteTamanhoImagem = 4 * 1024 * 1024; // equivalente a 4 megabytes - o cálculo foi feito pela IA, devo pesquisar mais a fundo dps, pra dar orgulho p/ prof. Matheus
+    let limiteTamanhoImagem = 4 * 1024 * 1024; // equivalente a 4 megabytes - o cálculo foi sugerido pela IA, devo pesquisar mais a fundo dps, pra dar orgulho p/ prof. Matheus
     let dadoCampoAvatar = avatar_input.files && avatar_input.files.length > 0 ? // operador ternário atua assim: condição ? ação em caso verdadeiro : ação nos casos negativos
       avatar_input.files[0] : null;
     let arquivo; // sugestão das IAs, a esse ponto já sofreu umas 6 mudanças de função e/ou dados atribuídos. Preciso pedir mais direcionamento para as coisas em que não tenho base
@@ -562,7 +562,7 @@
 
   }
 
-  /* Listando empresas cadastradas 
+  /* Listando empresas cadastradas   <---- IRRELEVANTE PARA A READEQUAÇÃO DO PROJETO WEB-DATA-VIZ AO CONTEXTO/MODELAGEM DO FICSIETE!
   function listar() {
     fetch("/empresas/listar", {
       method: "GET",

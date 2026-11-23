@@ -19,7 +19,7 @@ function cadastrar(avatarBuffer, avatarMime, nome, email, arroba, senha) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     let instrucaoSql = `
-        INSERT INTO usuario (imgAvatar, mimeAvatar, nome, email, arroba, senha, tipoConta) VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO usuario (imgAvatar, mimeAvatar, nome, email, arroba, senha, tipoConta, dtRegistro) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);
         `;
         
     let parametrosSql = [avatarBuffer, avatarMime, nome, email, arroba,  senha, 2];
@@ -75,3 +75,10 @@ module.exports = {
     verificarEmail
     // , dadosUsuario
 };
+
+async function buscarAvatar(idUsuario) {
+    var instrucaoSql = `SELECT imgAvatar AS imagem, mimeAvatar AS mime FROM usuario WHERE id = ${idUsuario};`;
+    return database.executar(instrucaoSql);
+}
+
+module.exports.buscarAvatar = buscarAvatar;

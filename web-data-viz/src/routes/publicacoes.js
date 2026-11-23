@@ -7,8 +7,16 @@ router.get("/listar", function (req, res) {
     publicacaoController.listar(req, res);
 });
 
+router.get("/:idPublicacao/capa", function (req, res) {
+    publicacaoController.capa(req, res);
+});
+
 router.get("/:idPublicacao", function (req, res) {
     publicacaoController.buscarPorId(req, res);
+});
+
+router.get("/:idPublicacao/paragrafo/:idParagrafo/img", function(req, res){
+    publicacaoController.paragrafoImagem(req, res);
 });
 
 router.post("/publicar/:idUsuario", function (req, res) {

@@ -19,7 +19,13 @@ async function publicar(titulo, imgBuffer, mimeImagem, usuarioId, tipoMundoFicci
     return database.efetuar(instrucaoSql, parametros);
 }
 
+async function buscarImagem(idCarta) {
+    var instrucaoSql = `SELECT imagem AS imagem, mimeImagem AS mime FROM carta WHERE id = ${idCarta};`;
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     listar,
     publicar
+    , buscarImagem
 };

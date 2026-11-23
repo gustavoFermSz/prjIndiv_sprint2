@@ -7,6 +7,10 @@ router.get('/listar', function(req, res){
     quizController.listar(req, res);
 });
 
+router.get('/:idQuiz/imagem', function(req, res){
+    quizController.imagem(req, res);
+});
+
 router.get('/:idQuiz', function(req, res){
     quizController.buscarCompleto(req, res);
 });
