@@ -23,7 +23,11 @@
     <div class="container">
       <h1 class="titulo">FicSiete</h1>
       <ul class="navbar">
-        <!-- navbar will be replaced here by the AI, because the content shouldn't be gone to the JS -->
+        <li><a href="index.html">Home</a></li>
+        <li class="requires-guest"><a href="login.html">Login</a></li>
+        <li class="requires-guest"><a href="cadastro.html" class="agora">Cadastro</a></li>
+        <!-- neste caso é melhor nem chamar o menuzin dropdown de usuário -->
+
       </ul>
     </div>
   </div>
@@ -200,6 +204,13 @@
 
 <script>
 
+  document.addEventListener('DOMContentLoaded', () => {
+    if (sessionStorage.EMAIL_USUARIO && sessionStorage.NOME_USUARIO) {
+      // redireciona para home (ou dashboard)
+      window.location = 'index.html';
+    }
+  });
+
 
   async function cadastrar() {
     // aguardar();
@@ -362,9 +373,9 @@
           finalizarAguardar();
 
         } else {
-          
+
           resposta.text().then(texto => {
-            
+
             cardErro.style.display = "block";
             mensagem_erro.innerHTML = texto;
             finalizarAguardar();

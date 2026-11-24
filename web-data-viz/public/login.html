@@ -8,9 +8,9 @@
 
     <title>FicSiete - Login</title>
 
-  <script src="./js/sessao.js"></script>
-  <script>window.NAV_ACTIVE = 'home';</script>
-  <script src="./js/navbar.js"></script>
+    <script src="./js/sessao.js"></script>
+    <script>window.NAV_ACTIVE = 'home';</script>
+    <script src="./js/navbar.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/icon/wordmark.png">
@@ -20,12 +20,15 @@
 <body>
 
     <!--Header-->
-
     <div class="header">
         <div class="container">
             <h1 class="titulo">FicSiete</h1>
             <ul class="navbar">
-                <!-- navbar will be populated by js/navbar.js -->
+                <li><a href="index.html">Home</a></li>
+                <li class="requires-guest"><a href="login.html" class="agora">Login</a></li>
+                <li class="requires-guest"><a href="cadastro.html">Cadastro</a></li>
+                <!-- neste caso é melhor nem chamar o menuzin dropdown de usuário -->
+
             </ul>
         </div>
     </div>
@@ -147,7 +150,12 @@
 
 
 
-
+    document.addEventListener('DOMContentLoaded', () => {
+        if (sessionStorage.EMAIL_USUARIO && sessionStorage.NOME_USUARIO) {
+            // redireciona para home (ou dashboard)
+            window.location = 'index.html';
+        }
+    });
 
 
 
@@ -163,17 +171,17 @@
 
             if (emailVar == "" || senhaVar == "") {
                 mensagem_erro.innerHTML = "Certifique-se de informar tanto email quanto senha";
-                
+
             } else if (!emailVar.includes('@') || !emailVar.includes('.')) {
                 mensagem_erro.innerHTML = "O email deve obrigatoriamente utilizar @ e ponto (.), como em 'nome@email.com'";
-                
+
             }
 
             let indiceArroba = emailVar.indexOf('@');
             if (email.indexOf('@', indiceArroba + 1) != -1) { // significa que há mais de um arroba   -- DEPOIS FAZER ARRAY PRA PEGAR CASOS ASSIM PRA @ E . NO COMEÇO. FOCAR DASHBOARD
                 // exista, no caso lance um errinho singelo
             }
-            
+
             finalizarAguardar();
             return false;
         }
@@ -206,10 +214,17 @@
                     sessionStorage.EMAIL_USUARIO = json.email;
                     sessionStorage.NOME_USUARIO = json.nome;
                     sessionStorage.ID_USUARIO = json.id;
-                    // sessionStorage.AQUARIOS = JSON.stringify(json.aquarios);     Aquarios não fazem mais parte da lógica deste sistema, favor parar de usar (comentar linhas e formar lógica simples que contorne a necessidade de entidades não mais existentes no FicSiete para coisas como validação de sessão ou acesso á dash, que também não deve mais conter em sua área funcional código executável que mencione esses itens desusados)
+                    // sessionStorage.AQUARIOS = JSON.stringify(json.aquarios);     Aquarios não fazem mais parte da lógica deste sistema, favor parar de usar (comentar linhas e formar lógica simples que contorne a necessidade de entidades não mais existentes no FicSiete para coisas como validação de sessão ou acesso à dash, que também não deve mais conter em sua área funcional código executável que mencione esses itens desusados)
 
-                    // store avatar, arroba and account type when returned by the API
-                    if (json.imgAvatar) sessionStorage.AVATAR_USUARIO = json.imgAvatar;
+                    // pegando imagem da rota que serve o avatar: GET /usuarios/:idUsuario/avatar. Aqui é pego o blob da imagem
+                    if (json.id) {
+                        sessionStorage.AVATAR_USUARIO = `/usuarios/${json.id}/avatar`;
+                    } else if (json.imgAvatar && typeof json.imgAvatar === 'string' && json.imgAvatar.startsWith('data:')) {
+                        // método antigo (e que acabava por não funcionar), guardar possível dataURL caso seja esse o formato da resposta da API
+                        sessionStorage.AVATAR_USUARIO = json.imgAvatar;
+
+                    }
+
                     if (json.arroba) sessionStorage.ARROBA_USUARIO = json.arroba;
                     if (json.tipoConta !== undefined) {
                         sessionStorage.TIPO_CONTA = json.tipoConta;

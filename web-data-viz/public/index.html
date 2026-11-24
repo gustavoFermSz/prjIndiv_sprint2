@@ -19,12 +19,31 @@
 
 <body>
   <!--Header-->
-
   <div class="header">
     <div class="container">
       <h1 class="titulo">FicSiete</h1>
       <ul class="navbar">
-        <!-- navbar will be populated by js/navbar.js -->
+        <li><a href="index.html" class="agora">Home</a></li>
+        <!-- navbar visitante não logado -->
+        <li class="requires-guest"><a href="login.html">Login</a></li>
+        <li class="requires-guest"><a href="cadastro.html">Cadastro</a></li>
+
+        <!-- navbar usuário autenticado-->
+        <li class="requires-auth"><a href="quizzes.html">Quizzes</a></li>
+        <li class="requires-auth"><a href="publicacoes.html">Publicações</a></li>
+        <li class="requires-auth"><a href="cartas.html">Cartas</a></li>
+        <li class="requires-auth"><a href="dashboard/dashboard.html">Dashboard</a></li>
+        <!-- avatar placeholder -->
+        <li class="profile-li">
+          <img id="profileImg" src="/assets/icon/usuario_comum.png" alt="avatar" class="profile-circle" />
+          <div id="profileDropdown" class="profile-dropdown hidden">
+            <strong id="profileName">Usuário</strong>
+            <div id="profileArroba"></div>
+            <div id="profileEmail"></div>
+            <hr />
+            <a href="#" id="logoutLink">Sair</a>
+          </div>
+        </li>
       </ul>
     </div>
   </div>

@@ -179,6 +179,9 @@ SHOW TABLES;
 
 
 SELECT * FROM usuario;
+SELECT * FROM publicacao;
+SELECT * FROM paragrafoPublicacao;
+SELECT * FROM reacaoPublicacao;
 
 /*
 DROP TABLE carta;
@@ -192,38 +195,7 @@ DROP TABLE paragrafopublicacao;
 DROP TABLE reacacaopublicacao;
 DROP TABLE usuario;
 
-/ 
-	PARTE DO WEB-DATA-VIZ ORIGINAL, IRRELEVANTE PARA O SISTEMA FICSIETE
 
-/* em nossa regra de negócio, um aquario tem apenas um sensor *
-CREATE TABLE aquario (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	descricao VARCHAR(300)
-);
-
--- DROP TABLE aquario;
--- DROP TABLE medida;
-SELECT * FROM aquario;
-SELECT * FROM medida;
-
-esta tabela deve estar de acordo com o que está em INSERT de sua API do arduino - dat-acqu-ino 
-
-CREATE TABLE medida (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	temperatura DECIMAL,
-	momento DATETIME,
-	fk_aquario INT,
-	FOREIGN KEY (fk_aquario) REFERENCES aquario(id)
-);
-
-
-CREATE TABLE aviso (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	titulo VARCHAR(100),
-	descricao VARCHAR(150),
-	fk_usuario INT,
-	FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
-);
 */
 
 

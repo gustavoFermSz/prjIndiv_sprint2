@@ -24,7 +24,14 @@ async function publicar(req, res) {
         var zonaCampo = req.body.zonaCampo || null;
         var especialidade = req.body.especialidade || null;
 
-        if (!titulo || !usuarioId) return res.status(400).send('Título ou usuário indefinido');
+        if (!titulo || !usuarioId) {
+            return res.status(400).send('Título ou usuário indefinido');
+        }
+
+        let tiposPermitidosMundo = ['Ficção especulativa', 'Fantasia Sobrenatural', 'Ficção científica', 'Terror', 'Suspense', 'Ficção histórica', 'Outro'];
+        if (!tipoMundoFiccional || tiposPermitidosMundo.indexOf(tipoMundoFiccional) === -1) {
+            tipoMundoFiccional = 'Outro';
+        }
 
         const tiposPermitidos = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
         const limite = 4 * 1024 * 1024;

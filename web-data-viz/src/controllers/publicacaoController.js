@@ -40,6 +40,13 @@ async function publicar(req, res) {
         var usuarioId = req.params.idUsuario;
         var tipoMundoFiccional = req.body.tipoMundoFiccional || null;
 
+        // validar tipoMundoFiccional contra os valores permitidos no script-ficsiete.sql
+        const tiposPermitidosMundo = ['Ficção especulativa', 'Fantasia Sobrenatural', 'Ficção científica', 'Terror', 'Suspense', 'Ficção histórica', 'Outro'];
+        if (!tipoMundoFiccional || tiposPermitidosMundo.indexOf(tipoMundoFiccional) === -1) {
+            // garantir valor válido - por segurança, definir como 'Outro'
+            tipoMundoFiccional = 'Outro';
+        }
+
         if (titulo === undefined || usuarioId === undefined) {
             return res.status(400).send("Título ou usuário indefinido");
         }
@@ -146,6 +153,11 @@ async function editar(req, res) {
         var novoTitulo = req.body.titulo;
         var imgCapa = req.body.imgCapa; // optional dataURL; if not provided, keep existing
         var tipoMundoFiccional = req.body.tipoMundoFiccional;
+
+        const tiposPermitidosMundo = ['Ficção especulativa', 'Fantasia Sobrenatural', 'Ficção científica', 'Terror', 'Suspense', 'Ficção histórica', 'Outro'];
+        if (tipoMundoFiccional && tiposPermitidosMundo.indexOf(tipoMundoFiccional) === -1) {
+            tipoMundoFiccional = 'Outro';
+        }
 
         if (!idPublicacao || !novoTitulo) return res.status(400).send('Dados incompletos');
 

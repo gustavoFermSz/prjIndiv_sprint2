@@ -258,12 +258,15 @@ async function avatar(req, res) {
     try {
         var idUsuario = req.params.idUsuario;
         let resultado = await usuarioModel.buscarAvatar(idUsuario);
+
         if (!resultado || resultado.length === 0) return res.status(404).send('Avatar não encontrado');
+        
         const registro = resultado[0];
         if (!registro.imagem) return res.status(404).send('Avatar vazio');
         res.setHeader('Content-Type', registro.mime || 'application/octet-stream');
         res.setHeader('Cache-Control', 'public, max-age=3600');
         return res.send(registro.imagem);
+        
     } catch (erro) {
         console.log(erro);
         return res.status(500).json(erro.sqlMessage || erro);

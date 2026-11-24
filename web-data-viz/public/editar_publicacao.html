@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FicSiete - Editar Publicação</title>
+  <script src="./js/sessao.js"></script>
+  <script src="./js/navbar.js"></script>
+  <link rel="stylesheet" href="./css/estilo.css" />
+  <link rel="stylesheet" href="./css/ficsite-conteudo.css" />
+  <script>window.NAV_ACTIVE = 'publicacoes';</script>
+</head>
+
+<body onload="validarSessao()">
+  <div class="header">
+    <div class="container">
+      <h1 class="titulo">FicSiete</h1>
+      <ul class="navbar">
+        <li><a href="index.html">Home</a></li>
+        <li class="requires-auth"><a href="quizzes.html">Quizzes</a></li>
+        <li class="requires-auth"><a href="publicacoes.html" class="agora">Publicações</a></li>
+        <li class="requires-auth"><a href="cartas.html">Cartas</a></li>
+        <li class="requires-auth"><a href="dashboard/dashboard.html">Dashboard</a></li>
+        <!-- avatar placeholder -->
+        <li class="profile-li">
+          <img id="profileImg" src="/assets/icon/usuario_comum.png" alt="avatar" class="profile-circle" />
+          <div id="profileDropdown" class="profile-dropdown hidden">
+            <strong id="profileName">Usuário</strong>
+            <div id="profileArroba"></div>
+            <div id="profileEmail"></div>
+            <hr />
+            <a href="#" id="logoutLink">Sair</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container main-conteudo">
+    <div class="mural-panel panel-fullwidth">
+      <div class="mural-header">
+        <h2>Editar Publicação</h2>
+      </div>
+      <div class="panel-inner">
+        <div class="campo"><input id="edit_titulo" type="text" placeholder="Título da publicação" /></div>
+        <div class="campo">
+          <label for="edit_tipo">Gênero / Mundo ficcional</label>
+          <select id="edit_tipo">
+            <option value="Ficção especulativa">Ficção especulativa</option>
+            <option value="Fantasia Sobrenatural">Fantasia Sobrenatural</option>
+            <option value="Ficção científica">Ficção científica</option>
+            <option value="Terror">Terror</option>
+            <option value="Suspense">Suspense</option>
+            <option value="Ficção histórica">Ficção histórica</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Capa atual</label>
+          <img id="edit_capa_preview" src="" class="capa-preview-large" />
+          <div><input id="edit_capa_file" type="file" /></div>
+        </div>
+
+        <div class="campo">
+          <h4>Parágrafos</h4>
+          <div id="edit_paragrafosContainer"></div>
+          <div class="actions"><button class="botao" id="btnEditAddPar">Adicionar Parágrafo</button> <button
+              class="botao sec" id="btnEditRemPar">Remover Parágrafo</button></div>
+        </div>
+
+        <div class="actions mt-12">
+          <button class="botao" id="btnSalvarEdicao">Salvar</button>
+          <button class="botao sec" id="btnCancelarEdicao">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function fileToDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = e => reject(e);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function blobToDataURL(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = e => reject(e);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const pubId = params.get('id');
+    if (!pubId) { alert('id ausente'); window.location = 'publicacoes.html'; }
+
+    const editTitulo = document.getElementById('edit_titulo');
+    const editTipo = document.getElementById('edit_tipo');
+    const editCapaPreview = document.getElementById('edit_capa_preview');
+    const editCapaFile = document.getElementById('edit_capa_file');
+    const editParagContainer = document.getElementById('edit_paragrafosContainer');
+
+    document.getElementById('btnCancelarEdicao').addEventListener('click', () => { window.location = 'publicacoes.html'; });
+
+    function addParagrafoEditar(prefill) {
+      const items = editParagContainer.getElementsByClassName('paragrafo-item');
+      if (items.length >= 6) { alert('Máximo 6 parágrafos'); return; }
+      const novoIndex = items.length + 1;
+      const div = document.createElement('div');
+      div.className = 'paragrafo-item';
+      div.setAttribute('data-index', novoIndex);
+      div.innerHTML = `
+        <h4>Parágrafo ${novoIndex}</h4>
+        <div class="campo"><input class="numero_input" type="number" value="${novoIndex}" min="1" max="6"/></div>
+        <div class="campo"><input class="subtitulo_input" type="text" placeholder="Subtítulo (opcional)"/></div>
+        <div class="campo"><textarea class="conteudo_input" placeholder="Conteúdo do parágrafo"></textarea></div>
+        <div class="campo"><label>Imagem atual:</label><img class="par_img_preview"/><input class="imgparagrafo_file" type="file"/></div>
+        <input type="hidden" class="imgparagrafo_existing" value="" />
+      `;
+      editParagContainer.appendChild(div);
+      if (prefill) {
+        div.querySelector('.numero_input').value = prefill.numeroNaOrdem || novoIndex;
+        div.querySelector('.subtitulo_input').value = prefill.subtitulo || '';
+        div.querySelector('.conteudo_input').value = prefill.conteudo || '';
+        if (prefill.existingImgDataUrl) {
+          div.querySelector('.par_img_preview').src = prefill.existingImgDataUrl;
+          div.querySelector('.imgparagrafo_existing').value = prefill.existingImgDataUrl;
+        } else {
+          div.querySelector('.par_img_preview').style.display = 'none';
+        }
+      }
+    }
+
+    document.getElementById('btnEditAddPar').addEventListener('click', (e) => { e.preventDefault(); addParagrafoEditar(); });
+    document.getElementById('btnEditRemPar').addEventListener('click', (e) => { e.preventDefault(); const items = editParagContainer.getElementsByClassName('paragrafo-item'); if (items.length <= 1) { alert('Deve haver ao menos 1 parágrafo'); return; } editParagContainer.removeChild(items[items.length - 1]); });
+
+    // load publication
+    (async function load() {
+      try {
+        let res = await fetch(`/publicacoes/${pubId}`);
+        if (!res.ok) { throw new Error('Não foi possível carregar publicação'); }
+        let pub = await res.json();
+        editTitulo.value = pub.titulo || '';
+        editTipo.value = pub.tipoMundoFiccional || '';
+        editCapaPreview.src = `/publicacoes/${pubId}/capa`;
+
+        editParagContainer.innerHTML = '';
+        for (let i = 0; i < pub.paragrafos.length; i++) {
+          const p = pub.paragrafos[i];
+          const prefill = { numeroNaOrdem: p.numeroNaOrdem, subtitulo: p.subtitulo, conteudo: p.conteudo };
+          if (p.temImagem) {
+            try {
+              let blobRes = await fetch(`/publicacoes/${pubId}/paragrafo/${p.id}/img`);
+              if (blobRes.ok) { let blob = await blobRes.blob(); prefill.existingImgDataUrl = await blobToDataURL(blob); }
+            } catch (e) { console.log('erro img par', e); }
+          }
+          addParagrafoEditar(prefill);
+        }
+      } catch (err) {
+        alert(err.message || err);
+        window.location = 'publicacoes.html';
+      }
+    })();
+
+    document.getElementById('btnSalvarEdicao').addEventListener('click', async function () {
+      const titulo = editTitulo.value;
+      const tipo = editTipo.value;
+      let imgCapaData = undefined;
+      if (editCapaFile.files && editCapaFile.files[0]) imgCapaData = await fileToDataURL(editCapaFile.files[0]);
+
+      const paragrafos = [];
+      const items = editParagContainer.getElementsByClassName('paragrafo-item');
+      for (let i = 0; i < items.length; i++) {
+        const it = items[i];
+        const numero = parseInt(it.querySelector('.numero_input').value || (i + 1));
+        const subtitulo = it.querySelector('.subtitulo_input').value;
+        const conteudo = it.querySelector('.conteudo_input').value;
+        const fileInput = it.querySelector('.imgparagrafo_file');
+        const existingHidden = it.querySelector('.imgparagrafo_existing');
+        let imgData = null;
+        if (fileInput && fileInput.files[0]) imgData = await fileToDataURL(fileInput.files[0]);
+        else if (existingHidden && existingHidden.value) imgData = existingHidden.value;
+        paragrafos.push({ numeroNaOrdem: numero, subtitulo: subtitulo, conteudo: conteudo, imgParagrafo: imgData });
+      }
+
+      let res = await fetch(`/publicacoes/editar/${pubId}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ titulo, imgCapa: imgCapaData, tipoMundoFiccional: tipo, paragrafos })
+      });
+      if (res.ok) window.location = 'publicacoes.html';
+      else { let txt = await res.text(); alert('Erro: ' + txt); }
+    });
+  </script>
+</body>
+
+</html>

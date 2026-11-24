@@ -145,18 +145,18 @@ body {
 
 /* profile avatar in navbar */
 .profile-circle {
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
-  border: 2px solid var(--índigo-principal);
+  border: 2px solid var(--índigo-secundário);
 }
 
 .profile-dropdown {
   position: absolute;
-  right: 20px;
-  top: 60px;
+  right: 15px;
+  top: 40px;
   background: white;
   color: var(--preto-principal);
   padding: 10px;
